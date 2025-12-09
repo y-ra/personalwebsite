@@ -6,181 +6,272 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <title>RY's Website</title>
+    <title>Rae's Site</title>
+    <link rel="icon" type="image/png" href="lightning.png">
+    <link rel="shortcut icon" type="image/png" href="lightning.png">
 
     <!-- Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700;900&family=Jua&family=Roboto:wght@300;400;700&family=Revalia&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Karla:ital,wght@0,200..800;1,200..800&family=Sora:wght@100..800&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+    <!-- Header will be loaded from header.html -->
+    <div id="header-container"></div>
+
+    <!-- Pixel Art Portal Game -->
+    <div id="portal-game" class="portal-container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="instructions">Instructions:<br>Use A/D or the Arrow Keys to navigate.<br>Press enter when the sword is on an icon to enter a page.<br>Backspace  or ESC to return to this page.<br>Or just click regularly to navigate around the website. </div>
+        <div id="section-preview" class="section-preview"></div>
     </div>
 
-    <!-- Header -->
-    <header>
-        <nav>
-            <h1>RY</h1>
-            <button class="nav-toggle" aria-label="Toggle navigation">
-                <span class="hamburger"></span>
-            </button>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#resume">Resume</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- Return to Portal Button -->
+    <button id="return-portal-btn" class="return-portal-btn" onclick="returnToPortal()" style="display: none;">
+        ← Return to Portal
+    </button>
 
-    <!-- Hero/Intro Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <img src="assets/IMG_1680.JPG" alt="Rae Yan" class="hero-image" />
-            <h2>Hello, I'm Rae.</h2>
-            <p>Computer Scientist & Music Designer specializing in the intersection of technology and art</p>
-        </div>
-    </section>
+    <!-- Content Sections (hidden initially, shown when navigating) -->
+    <div id="content-sections" class="content-sections" style="display: none;">
 
-    <!-- About Section -->
-    <section id="about">
-        <h2>About Me</h2>
-        <p>
-            Hello, I go by Rae, Rachel, or Rei! I am an Honors Dean's List student at Northeastern majoring in Combined 
-            Computer Science & Music with a Concentration in Music Technology. <br><br>
-            I love exploring where software, music, and engineering intersect, especially in the realm of video games, from game 
-            programming, to soundtrack composition, to AR/VR immersion, to audio hardware, to performance technology, to asset modeling, 
-            to more. Games changed my life as a child for better, and I want to pay it forward with my career. <br><br>
-            I am experienced with software development, game programming, music design, and more, all showcased on this website.
-            Currently, I am searching for co-ops, internships, or full-time positions, so please feel free to reach out about anything, 
-            and take your time exploring the website — you might find a hidden easter egg! <br><br>
-            Fun Fact: I have perfect pitch! Test me if we meet.
-        </p>
-    </section>
+        <!-- About Section -->
+        <section id="about" class="content-section">
+            <div class="section-content">
+                <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+                <h2>About Me</h2>
+                <div class="about-content">
+                    <img src="assets/IMG_1680.JPG" alt="Rae Yan" class="about-image" />
+                    <div class="about-text">
+                        <h3>Hello, I'm Rae.</h3>
+                        <ul>
+                          <li><a href="https://github.com/y-ra">GitHub</a></li>
+                          <li><a href="https://y-ra.itch.io/" target="_blank">Itch.io</a></li>
+                        </ul>
+                        <p>
+                            Hey, nice to meet you! I go by Rae or Rachel, and I am an Honors Dean's List student at Northeastern 
+                            majoring in Combined Computer Science & Music with a Concentration in Music Technology. <br><br>
 
-    <!-- Resume Section -->
-    <section id="resume">
-        <div class="container">
-            <h2>Resume</h2>
-            <p>Download my resume by clicking the button below:</p>
-            <a href="assets\RAE YAN Resume nu_e Nloc ns.pdf" target="_blank" class="btn">Download Resume</a>
-        </div>
-    </section>
+                            One of the primary reasons I chose this path is for the intersections between art and technology, 
+                            particularly for video games. I figured --- video games need programming & they need music; what better 
+                            major to pursue? I'm also focused on the overall creative applications of programming and software in general, 
+                            outside of gaming. <br><br>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio">
-        <h2>Portfolio</h2>
-        <div class="projects">
-            <div class="project">
-                <h3>OpenBnB</h3>
-                <p>
-                    OpenBnB connects evacuees displaced by natural disasters with hosts offering temporary housing,
-                    providing a calmer, personal environment in times of crisis.
-                </p>
-                <a href="https://open-bnb.vercel.app/" target="_blank">Visit OpenBnB</a>
+                            I'm currently making a breakcore track for an NU alumni's upcoming video game. Additionally, I recently 
+                            gained invaluable video game marketing, influencer outreach, media planning, and campaign experience with 
+                            Black Soup in Berlin, helping out with multiple game launches and releases. <br><br>
+                            
+                            I'm also delving deeper into my interest in building practical, user-centric software and taking full 
+                            ownership of projects from concept through deployment. Developing web applications or software tools that 
+                            enable people to improve their lives or their impact on the planet is something that got me into computer 
+                            science initially. You can see an example of this in my Garment Genie browser extension, NUCircle, and more, 
+                            found on this website's portfolio page. <br><br>
+
+                            Thanks for visiting my website. Feel free to reach out to hear about my projects, experiences, personal 
+                            take on the ever-so-complicated Legend of Zelda timeline, or to test my perfect pitch capacity. Let me 
+                            know if you find the hidden treasure on this site!
+                        </p>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div class="project">
-                <h3>Urban Refuge Map</h3>
-                <p>
-                    A GIS-integrated map for Urban Refuge that displays resources for refugees with location info,
-                    transportation details, and more.
-                </p>
-                <a href="https://urban-refugee.vercel.app/" target="_blank">Visit the Urban Refuge map</a>
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="content-section">
+            <div class="section-content">
+                <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+                <h2>Portfolio</h2>
+                <div class="projects">
+                    <!-- The Flop -->
+                    <div class="project" data-project-url="#the-flop-video">
+                        <h3>The Flop</h3>
+                        <p>I composed and produced the backing track for a whimsical animation created by a colleague.</p>
+                        <div class="project-buttons">
+                            <a href="#the-flop-video" class="project-btn">Watch</a>
+                        </div>
+                    </div>
+
+                    <!-- NUCircle -->
+                    <div class="project" data-project-url="https://fall25-project-m-a-r-t-514.onrender.com">
+                        <h3>NUCircle</h3>
+                        <p>A Q&A and community platform for Northeastern students with real-time multiplayer 
+                          trivia games, messaging, and more.</p>
+                        <div class="project-buttons">
+                            <a href="https://fall25-project-m-a-r-t-514.onrender.com" target="_blank" class="project-btn">Visit Site</a>
+                            <a href="https://github.com/y-ra/NUCircle" target="_blank" class="project-btn">GitHub</a>
+                        </div>
+                    </div>
+
+                    <!-- Garment Genie -->
+                    <div class="project" data-project-url="https://github.com/y-ra/garmentgenie">
+                        <h3>Garment Genie</h3>
+                        <p>
+                            A WIP browser extension recommending 2nd-hand alternatives for Shein shoppers.
+                            Currently under review, but the code is available.
+                        </p>
+                        <div class="project-buttons">
+                            <a href="https://github.com/y-ra/garmentgenie" target="_blank" class="project-btn">GitHub</a>
+                        </div>
+                    </div>
+
+                    <!-- Urban Refuge -->
+                    <div class="project" data-project-url="https://urban-refugee.vercel.app">
+                        <h3>Urban Refuge Map</h3>
+                        <p>
+                            A GIS-integrated map for Urban Refuge that displays resources for refugees with location info,
+                            transportation, and more.
+                        </p>
+                        <div class="project-buttons">
+                            <a href="https://urban-refugee.vercel.app" target="_blank" class="project-btn">Visit Site</a>
+                            <a href="" target="https://github.com/y-ra/urban-refuge" class="project-btn">GitHub</a>
+                        </div>
+                    </div>
+
+                    <!-- OpenBnB -->
+                    <div class="project" data-project-url="https://open-bnb.vercel.app">
+                        <h3>OpenBnB</h3>
+                        <p>
+                            OpenBnB connects evacuees displaced by disasters with hosts offering temporary housing,
+                            providing a calmer environment in times of crisis.
+                        </p>
+                        <div class="project-buttons">
+                            <a href="https://open-bnb.vercel.app" target="_blank" class="project-btn">Visit Site</a>
+                            <a href="" target="_blank" class="project-btn">GitHub</a>
+                        </div>
+                    </div>
+
+                    <!-- Light 'Em All -->
+                    <div class="project" data-project-url="https://y-ra.itch.io/lightemall">
+                        <h3>Light 'Em All</h3>
+                        <p>
+                            A puzzle game implementing Kruskal's and BFS algorithms. Connect all tiles with pipes to light
+                            up the entire board and win.
+                        </p>
+                        <div class="project-buttons">
+                            <a href="https://y-ra.itch.io/lightemall" target="_blank" class="project-btn">View on Itch</a>
+                        </div>
+                    </div>
+
+                    <!-- Sugar Sprint -->
+                    <div class="project" data-project-url="https://kblizzz.itch.io/sugar-sprint">
+                        <h3>Sugar Sprint</h3>
+                        <p>
+                            A 2D candy-themed platformer centered on a skater girl and her quirky dog. I collaborated on the
+                            original soundtrack with a team of musicians.
+                        </p>
+                        <div class="project-buttons">
+                            <a href="https://kblizzz.itch.io/sugar-sprint" target="_blank" class="project-btn">View on Itch</a>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div class="project">
-                <h3>LightEmAll</h3>
-                <p>
-                    A puzzle game implementing Kruskal's and BFS algorithms. Connect all tiles with pipes to light
-                    up the entire board.
-                </p>
-                <a href="https://y-ra.itch.io/lightemall" target="_blank">View on Itch</a>
+        <!-- The Flop Video Section -->
+        <section id="the-flop-video" class="content-section">
+            <div class="section-content">
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+                    <button onclick="window.navigateToSection('portfolio')" class="back-home-btn">Back to Portfolio</button>
+                    <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+                </div>
+                <h2>The Flop</h2>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <video controls style="max-width: 100%; border-radius: 10px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);">
+                        <source src="assets/the-flop.mov" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
             </div>
+        </section>
 
-            <div class="project">
-                <h3>Sugar Sprint</h3>
-                <p>
-                    A 2D candy-themed rhythm game centered on a skater girl and her sweet dog. I collaborated on the
-                    original soundtrack with a team of talented musicians.
-                </p>
-                <a href="https://kblizzz.itch.io/sugar-sprint" target="_blank">View on Itch</a>
+        <!-- Resume Section -->
+        <section id="resume" class="content-section">
+            <div class="section-content">
+                <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+                <h2>Resume</h2>
+                <p>Download my resume by clicking the button below:</p>
+                <a href="assets\RAE (RACHEL) YAN Resume ou_e Nloc ns.pdf" target="_blank" class="btn">Download Resume</a>
             </div>
+        </section>
 
-            <div class="project">
-                <h3>Garment Genie</h3>
-                <p>
-                    A Chrome extension recommending cheaper, sustainable clothing alternatives from thredUp for Shein shoppers.
-                    Under review for the Chrome Web Store, but available via a downloadable .zip.
-                </p>
-                <a href="https://drive.google.com/file/d/1cp5nTUNM6dDffnbAz1ivQgUGGHUqFFCW/view?usp=drive_link" target="_blank">Download .zip</a>
+        <!-- Contact Section -->
+        <section id="contact" class="content-section">
+            <div class="section-content">
+                <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+                <h2>Contact</h2>
+                <p>Reach out to me through the following platforms:</p>
+                <ul>
+                    <li><a href="mailto:rae-yan@outlook.com">Email</a></li>
+                    <li><a href="https://linkedin.com/in/yan-rae" target="_blank">LinkedIn</a></li>
+                </ul>
             </div>
-            <!--
-            <div class="project">
-                <h3>Rebeat</h3>
-                <p>
-                    A 2D combat game with a persistent memory of the player. WIP — launcher and files on Itch, along with a changelog of fixes.
-                </p>
-                <a href="https://rachelyan.itch.io/rebeat" target="_blank">View on Itch</a>
-            </div> -->
-        </div>
-    </section>
+        </section>
+    </div>
 
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>Feel free to reach out through the following platforms:</p>
-        <ul>
-            <!-- Added id="github-link" to attach event listener -->
-            <li><a href="mailto:yan.ra@northeastern.edu">Email</a></li>
-            <li><a href="https://github.com/y-ra" target="_blank" id="github-link">GitHub</a></li>
-            <li><a href="https://linkedin.com/in/yan-rae" target="_blank">LinkedIn</a></li>
-        </ul>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>© 2024 R. Yan. All Rights Reserved.</p>
-    </footer>
+    <!-- Footer will be loaded from footer.html -->
+    <div id="footer-container"></div>
     
     <!-- Hidden message container -->
     <div id="message" style="display:none; position: fixed; bottom: 20px; right: 20px; background: #222; color: #fff; padding: 10px; border-radius: 5px;">
     </div>
+    
+    <!-- Treasure Chest Modal -->
+    <div id="treasure-chest-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; flex-wrap: wrap;">
+        <div style="background: rgba(13, 33, 80, 0.95); border: 2px solid rgba(125, 245, 255, 0.5); border-radius: 20px; padding: 3rem; text-align: center; max-width: 500px; box-shadow: 0 8px 35px rgba(0, 0, 0, 0.7);">
+            <p style="font-family: 'Space Grotesk', sans-serif; color: #FFFFFF; margin-bottom: 2rem; text-align: center;">Congratulations, you found the treasure! I hope it was fun to find. Here's the worst audio track I've ever made (Turn your volume down if it's high).</p>
+            <audio id="troll-audio" controls style="width: 100%; margin-bottom: 1rem;">
+                <source src="assets/troll.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            <button onclick="closeTreasureChestModal()" class="treasure-modal-close-btn">Close</button>
+        </div>
+    </div>
 
     <script>
-        // Animate sections on scroll
-        const sections = document.querySelectorAll('section');
-        const options = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+        // Load header and footer from separate files
+        async function loadHeaderFooter() {
+            try {
+                // Load header
+                const headerResponse = await fetch('header.html');
+                const headerHTML = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHTML;
+                
+                // Add click handler to header home link
+                const headerLink = document.querySelector('.header-home-link');
+                if (headerLink) {
+                    headerLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        if (typeof window.returnToPortal === 'function') {
+                            window.returnToPortal();
+                        }
+                    });
                 }
-            });
-        }, options);
-
-        sections.forEach(section => {
-            observer.observe(section);
-        });
-
-        // Toggle nav menu on mobile
-        const navToggle = document.querySelector('.nav-toggle');
-        const navLinks = document.querySelector('.nav-links');
-
-        navToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('show-nav');
-        });
+                
+                // Load footer
+                const footerResponse = await fetch('footer.html');
+                const footerHTML = await footerResponse.text();
+                document.getElementById('footer-container').innerHTML = footerHTML;
+                
+                // Trigger resize after footer loads so canvas can measure footer height
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                }, 100);
+            } catch (error) {
+                console.error('Error loading header/footer:', error);
+            }
+        }
+        
+        // Load header and footer when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadHeaderFooter);
+        } else {
+            loadHeaderFooter();
+        }
     </script>
+    <script src="thunder-audio.js"></script>
+    <script src="portal-game.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
