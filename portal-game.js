@@ -1175,6 +1175,90 @@
     
     // Handle keyboard input
     const keys = {};
+    
+    // Touch controls for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isTouching = false;
+    
+    // Touch event handlers for mobile movement
+    if (canvas) {
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent scrolling
+            if (e.touches.length > 0) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isTouching = true;
+            }
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Prevent scrolling
+            if (e.touches.length > 0 && isTouching) {
+                const touchX = e.touches[0].clientX;
+                const touchY = e.touches[0].clientY;
+                const deltaX = touchX - touchStartX;
+                const deltaY = touchY - touchStartY;
+                
+                // Horizontal swipe threshold (30px)
+                if (Math.abs(deltaX) > 30 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > 0) {
+                        // Swipe right
+                        keys['d'] = true;
+                        setTimeout(() => { keys['d'] = false; }, 100);
+                    } else {
+                        // Swipe left
+                        keys['a'] = true;
+                        setTimeout(() => { keys['a'] = false; }, 100);
+                    }
+                    touchStartX = touchX; // Update start position for continuous movement
+                }
+            }
+        });
+        
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            isTouching = false;
+            keys['a'] = false;
+            keys['d'] = false;
+            
+            // Check for tap (not swipe) - for icon interaction
+            if (e.changedTouches.length > 0) {
+                const touch = e.changedTouches[0];
+                const rect = canvas.getBoundingClientRect();
+                const tapX = touch.clientX - rect.left;
+                const tapY = touch.clientY - rect.top;
+                
+                // Check if tap is on an icon (same logic as click)
+                if (state.currentScene === 'main') {
+                    for (let i = 0; i < state.images.length; i++) {
+                        const img = state.images[i];
+                        const imgCenterX = img.x + img.width / 2;
+                        const imgCenterY = img.y + img.height / 2;
+                        const distX = Math.abs(tapX - imgCenterX);
+                        const distY = Math.abs(tapY - imgCenterY);
+                        
+                        if (distX < img.width / 2 + 10 && distY < img.height / 2 + 10) {
+                            const sectionId = state.sections[img.section].id;
+                            window.navigateToSection(sectionId);
+                            return;
+                        }
+                    }
+                } else if (state.currentScene === 'edge' && state.treasureChestHovered) {
+                    // Tap on treasure chest
+                    const coinSound = new Audio('assets/coin.mp3');
+                    coinSound.volume = 0.5;
+                    coinSound.play().catch(err => {
+                        console.log('Could not play coin sound:', err);
+                    });
+                    if (typeof window.showTreasureChestModal === 'function') {
+                        window.showTreasureChestModal();
+                    }
+                }
+            }
+        });
+    }
+    
     document.addEventListener('keydown', (e) => {
         if (e.key === ' ') {
             e.preventDefault(); // Prevent page scroll

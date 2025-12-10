@@ -141,6 +141,42 @@ body {
   pointer-events: none;
 }
 
+.mobile-instructions {
+  display: none;
+}
+
+.desktop-instructions {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .mobile-instructions {
+    display: inline;
+  }
+  
+  .desktop-instructions {
+    display: none;
+  }
+}
+
+.mobile-instructions {
+  display: none;
+}
+
+.desktop-instructions {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .mobile-instructions {
+    display: inline;
+  }
+  
+  .desktop-instructions {
+    display: none;
+  }
+}
+
 /* Section Preview (the modal that pops up) */
 .section-preview {
   position: absolute;
@@ -743,18 +779,52 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Header adjustments */
+  .site-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .site-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-icons {
+    gap: 1rem;
+  }
+
+  .header-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .header-icon.itch-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Canvas */
   #gameCanvas {
     width: 100%;
     height: auto;
   }
 
+  /* Instructions */
+  .instructions {
+    font-size: 14px;
+    padding: 0 1rem;
+    top: 20px;
+  }
+
+  /* Section preview */
   .section-preview {
     width: 90%;
     max-width: 400px;
-    height: 250px;
+    height: auto;
+    min-height: 200px;
     padding: 1.5rem;
   }
 
+  /* Projects */
   .project {
     width: 80%;
     margin: 0 auto;
@@ -763,9 +833,64 @@ body {
   .about-content {
     flex-direction: column;
   }
+
+  /* Buttons */
+  .back-home-btn,
+  .treasure-modal-close-btn,
+  .btn {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+  }
+
+  /* Modal */
+  #treasure-chest-modal > div {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+    max-width: 90%;
+  }
+
+  /* Content sections */
+  .content-section {
+    padding: 2rem 1rem;
+  }
+
+  .section-content {
+    padding: 2rem 1rem;
+  }
 }
 
 @media (max-width: 480px) {
+  /* Header */
+  .site-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .site-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .header-icons {
+    gap: 0.75rem;
+  }
+
+  .header-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header-icon.itch-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Instructions */
+  .instructions {
+    font-size: 12px;
+    padding: 0 0.5rem;
+    top: 15px;
+  }
+
+  /* Content sections */
   .content-section h2 {
       font-size: 2rem;
   }
@@ -778,12 +903,62 @@ body {
     font-size: 1rem;
   }
 
+  .section-preview {
+    width: 95%;
+    padding: 1rem;
+  }
+
   .section-preview h3 {
     font-size: 1.5rem;
   }
 
   .section-preview p {
     font-size: 0.9rem;
+  }
+
+  /* Buttons */
+  .back-home-btn,
+  .treasure-modal-close-btn,
+  .btn {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+  }
+
+  /* Modal */
+  #treasure-chest-modal > div {
+    padding: 1.5rem 1rem;
+    margin: 0.5rem;
+  }
+
+  #treasure-chest-modal p {
+    font-size: 0.9rem;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 1rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .header-icon-link {
+    padding: 0.25rem;
+  }
+
+  .back-home-btn,
+  .treasure-modal-close-btn,
+  .btn,
+  .explore-btn {
+    min-height: 44px; /* iOS recommended touch target */
+  }
+
+  /* Disable hover effects on touch devices */
+  .header-icon-link:hover {
+    transform: none;
+    opacity: 1;
   }
 }
 
