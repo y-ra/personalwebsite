@@ -27,6 +27,10 @@
         <canvas id="gameCanvas"></canvas>
         <div class="instructions">Instructions:<br><span class="desktop-instructions">Use A/D or the Arrow Keys to navigate.<br>Press enter when the sword is on an icon to enter a page.<br>Backspace or ESC to return to this page.</span><span class="mobile-instructions">Swipe left/right to move.<br>Tap icons to enter pages.<br>Use the back button to return.</span><br>Or just click/tap regularly to navigate around the website. </div>
         <div id="section-preview" class="section-preview"></div>
+        <!-- Mobile Message Overlay -->
+        <div id="mobile-message" class="mobile-message" style="display: none;">
+            <p>Unfortunately, Rae's website is currently inaccessible on mobile (mobile accessibility is actively being worked on). I would be honored if you would check it out on a computer, as there is a secret treasure for you to find somewhere on the site!</p>
+        </div>
     </div>
 
     <!-- Return to Portal Button -->
@@ -116,6 +120,15 @@
                         </div>
                     </div>
 
+                    <!-- Audio & Music Samples -->
+                    <div class="project" data-project-url="#audio-music">
+                        <h3>Audio & Music Samples</h3>
+                        <p>Other music and audio composed and produced by me.</p>
+                        <div class="project-buttons">
+                            <a href="#audio-music" class="project-btn">Listen</a>
+                        </div>
+                    </div>
+
                     <!-- Urban Refuge -->
                     <div class="project" data-project-url="https://urban-refugee.vercel.app">
                         <h3>Urban Refuge Map</h3>
@@ -172,9 +185,9 @@
         <!-- The Flop Video Section -->
         <section id="the-flop-video" class="content-section">
             <div class="section-content">
-                <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
-                    <button onclick="window.navigateToSection('portfolio')" class="back-home-btn">Back to Portfolio</button>
-                    <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem;">
+                    <button onclick="window.navigateToSection('portfolio')" class="back-home-btn" style="margin: 0;">Back to Portfolio</button>
+                    <button onclick="returnToPortal()" class="back-home-btn" style="margin: 0;">Back to Home</button>
                 </div>
                 <h2>The Flop</h2>
                 <div style="text-align: center; margin-top: 2rem;">
@@ -182,6 +195,31 @@
                         <source src="assets/the-flop.mov" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audio & Music Samples Section -->
+        <section id="audio-music" class="content-section">
+            <div class="section-content">
+                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <button onclick="window.navigateToSection('portfolio')" class="back-home-btn" style="margin: 0;">Back to Portfolio</button>
+                    <button onclick="returnToPortal()" class="back-home-btn" style="margin: 0;">Back to Home</button>
+                </div>
+                <h2>Audio & Music Samples</h2>
+                <div style="text-align: center; margin-top: 2rem; display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+                    <div style="width: 100%; max-width: 600px;">
+                        <audio controls style="width: 100%; margin-bottom: 1rem;">
+                            <source src="assets/must2102-fp.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    <div style="width: 100%; max-width: 600px;">
+                        <audio controls style="width: 100%; margin-bottom: 1rem;">
+                            <source src="assets/must2102-3b.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
                 </div>
             </div>
         </section>
@@ -220,7 +258,7 @@
     <!-- Treasure Chest Modal -->
     <div id="treasure-chest-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; flex-wrap: wrap;">
         <div style="background: rgba(13, 33, 80, 0.95); border: 2px solid rgba(125, 245, 255, 0.5); border-radius: 20px; padding: 3rem; text-align: center; max-width: 500px; box-shadow: 0 8px 35px rgba(0, 0, 0, 0.7);">
-            <p style="font-family: 'Space Grotesk', sans-serif; color: #FFFFFF; margin-bottom: 2rem; text-align: center;">Congratulations, you found the treasure! I hope it was fun to find. Here's the worst audio track I've ever made (Turn your volume down if it's high).</p>
+            <p style="font-family: 'Space Grotesk', sans-serif; color: #FFFFFF; margin-bottom: 2rem; text-align: center;">Congratulations, you found the secret treasure! I hope it was fun to find. Here's the worst audio track I've ever made (Turn your volume down if it's high).</p>
             <audio id="troll-audio" controls style="width: 100%; margin-bottom: 1rem;">
                 <source src="assets/troll.wav" type="audio/wav">
                 Your browser does not support the audio element.

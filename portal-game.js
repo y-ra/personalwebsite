@@ -112,6 +112,25 @@
         // Update mobile detection on resize
         state.isMobile = isMobileDevice();
         
+        // Show/hide mobile message based on device type
+        const mobileMessage = document.getElementById('mobile-message');
+        const instructionsEl = document.querySelector('.instructions');
+        if (state.isMobile) {
+            if (mobileMessage) {
+                mobileMessage.style.display = 'flex';
+            }
+            if (instructionsEl) {
+                instructionsEl.style.display = 'none';
+            }
+        } else {
+            if (mobileMessage) {
+                mobileMessage.style.display = 'none';
+            }
+            if (instructionsEl) {
+                instructionsEl.style.display = 'block';
+            }
+        }
+        
         const headerHeight = 70;
         canvas.width = window.innerWidth;
         // Canvas extends all the way to bottom of viewport (footer overlays it)
@@ -124,8 +143,8 @@
         // Sidewalk starts 120px above footer and extends to footer top
         state.floorLevel = canvas.height - actualFooterHeight - 120;
         
-        // Reinitialize images if they exist
-        if (state.images && state.images.length > 0) {
+        // Reinitialize images if they exist (only on desktop)
+        if (!state.isMobile && state.images && state.images.length > 0) {
             initImages();
         }
     }
@@ -423,6 +442,8 @@
         state.images = [];
         
         // Mobile layout: vertical arrangement with smaller icons
+        // COMMENTED OUT - Mobile devices now show a message instead
+        /*
         if (state.isMobile) {
             const imageSize = 50; // Smaller icons for mobile
             const centerX = canvas.width / 2;
@@ -448,6 +469,8 @@
                 });
             }
         } else {
+        */
+        if (!state.isMobile) {
             // Desktop layout: horizontal arrangement
             const imageSize = 80;
             const gapSize = 200;
@@ -1111,6 +1134,8 @@
     function updatePhysics() {
         // Update player position (no jumping, just horizontal movement)
         // On mobile, player stays centered (no movement needed with vertical layout)
+        // COMMENTED OUT - Mobile devices now show a message instead
+        // if (!state.isMobile) {
         if (!state.isMobile) {
             state.player.x += state.player.velocityX;
         }
@@ -1124,6 +1149,8 @@
         }
         
         // Scene transitions only work on desktop (mobile doesn't use edge scenes)
+        // COMMENTED OUT - Mobile devices now show a message instead
+        // if (!state.isMobile && state.sceneTransitionCooldown === 0) {
         if (!state.isMobile && state.sceneTransitionCooldown === 0) {
             // Simple edge detection
             const edgeThreshold = 10; // pixels from edge to trigger transition
@@ -1170,7 +1197,8 @@
             }
         } else {
             // On mobile, keep player centered
-            state.player.x = canvas.width / 2;
+            // COMMENTED OUT - Mobile devices now show a message instead
+            // state.player.x = canvas.width / 2;
         }
         
         // Only check collisions with images in main scene
@@ -1221,6 +1249,8 @@
         }
         
         // Skip keyboard movement on mobile (icons are arranged vertically, no movement needed)
+        // COMMENTED OUT - Mobile devices now show a message instead
+        /*
         if (state.isMobile) {
             // Still handle Enter and Escape keys
             if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
@@ -1229,6 +1259,7 @@
                 return; // Ignore movement keys on mobile
             }
         }
+        */
         
         // Handle arrow keys and WASD (desktop only)
         const keyMap = {
@@ -1429,6 +1460,8 @@
         // Handle movement (desktop only)
         state.player.velocityX = 0;
         
+        // COMMENTED OUT - Mobile devices now show a message instead
+        // if (!state.isMobile) {
         if (!state.isMobile) {
             if (keys['a']) {
                 state.player.velocityX = -state.moveSpeed;
@@ -1464,6 +1497,19 @@
             return;
         }
         
+        // Check if mobile and show message overlay
+        if (state.isMobile) {
+            const mobileMessage = document.getElementById('mobile-message');
+            if (mobileMessage) {
+                mobileMessage.style.display = 'flex';
+            }
+            // Hide instructions on mobile
+            const instructionsEl = document.querySelector('.instructions');
+            if (instructionsEl) {
+                instructionsEl.style.display = 'none';
+            }
+        }
+        
         // Setup canvas click handler
         setupCanvasClick();
         
@@ -1478,11 +1524,27 @@
                 loadGlitchSprites(),
                 loadAudio()
             ]).then(() => {
-                initImages();
                 initStorm();
                 // Try to start background thunder audio
                 playThunderAudio();
-                gameLoop();
+                
+                // Only initialize images and game loop if not mobile
+                if (!state.isMobile) {
+                    initImages();
+                    gameLoop();
+                } else {
+                    // On mobile, run a simplified game loop that only draws the storm background
+                    function mobileGameLoop() {
+                        if (!canvas || !ctx) {
+                            requestAnimationFrame(mobileGameLoop);
+                            return;
+                        }
+                        // Only draw the storm background
+                        drawStorm();
+                        requestAnimationFrame(mobileGameLoop);
+                    }
+                    mobileGameLoop();
+                }
             });
         } else {
             console.log('Canvas not ready, retrying...');
