@@ -1199,6 +1199,12 @@
         // Enter key: Open treasure chest modal (only in edge scene)
         if (e.key === 'Enter' && state.currentScene === 'edge' && state.treasureChestHovered) {
             e.preventDefault();
+            // Play coin sound when opening treasure chest
+            const coinSound = new Audio('assets/coin.mp3');
+            coinSound.volume = 0.5;
+            coinSound.play().catch(err => {
+                console.log('Could not play coin sound:', err);
+            });
             if (typeof window.showTreasureChestModal === 'function') {
                 window.showTreasureChestModal();
             }
