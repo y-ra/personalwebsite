@@ -109,6 +109,9 @@
     function resizeCanvas() {
         if (!getCanvasElements()) return;
         
+        // Update mobile detection on resize
+        state.isMobile = isMobileDevice();
+        
         const headerHeight = 70;
         canvas.width = window.innerWidth;
         // Canvas extends all the way to bottom of viewport (footer overlays it)
@@ -418,59 +421,80 @@
         }
         
         state.images = [];
-        const imageSize = 80; // Smaller icons
-        const gapSize = 200; // Gap in the middle for the sword
-        const centerX = canvas.width / 2;
-        const iconSpacing = 120; // Spacing between icon centers (and from gap edge to nearest icon center)
         
-        // Position icons by their centers to ensure symmetry
-        // Left side: Icon2 (Resume) center is closest to center gap
-        const leftIcon2CenterX = centerX - gapSize / 2 - iconSpacing;
-        const leftIcon2X = leftIcon2CenterX - imageSize / 2; // Left edge position
-        
-        // Icon1 (About) center is iconSpacing away from Icon2 center
-        const leftIcon1CenterX = leftIcon2CenterX - iconSpacing;
-        const leftIcon1X = leftIcon1CenterX - imageSize * 2; // Left edge position
-        
-        // Right side: Icon3 (Portfolio) center is closest to center gap
-        const rightIcon3CenterX = centerX + gapSize / 2 + iconSpacing;
-        const rightIcon3X = rightIcon3CenterX - imageSize / 2; // Left edge position
-        
-        // Icon4 (Contact) center is iconSpacing away from Icon3 center
-        const rightIcon4CenterX = rightIcon3CenterX + iconSpacing;
-        const rightIcon4X = rightIcon4CenterX + imageSize; // Left edge position
-        
-        for (let i = 0; i < state.sections.length; i++) {
-            let x;
-            const y = state.floorLevel - imageSize + 20; // Positioned on thicker sidewalk
+        // Mobile layout: vertical arrangement with smaller icons
+        if (state.isMobile) {
+            const imageSize = 50; // Smaller icons for mobile
+            const centerX = canvas.width / 2;
+            const startY = state.floorLevel - 300; // Start higher up
+            const verticalSpacing = 80; // Space between icons vertically
             
-            if (i === 0) {
-                // About (leftmost)
-                x = leftIcon1X;
-            } else if (i === 1) {
-                // Resume (left, nearest to center)
-                x = leftIcon2X;
-            } else if (i === 2) {
-                // Portfolio (right, nearest to center)
-                x = rightIcon3X;
-            } else {
-                // Contact (rightmost)
-                x = rightIcon4X;
+            for (let i = 0; i < state.sections.length; i++) {
+                const x = centerX - imageSize / 2; // Center horizontally
+                const y = startY + (i * verticalSpacing); // Stack vertically
+                
+                state.images.push({
+                    x: x,
+                    y: y,
+                    width: imageSize,
+                    height: imageSize,
+                    glowColor: state.sections[i].glowColor,
+                    section: i,
+                    active: false,
+                    glitchActive: false,
+                    hovered: false,
+                    currentOffsetY: 0,
+                    targetOffsetY: 0
+                });
             }
+        } else {
+            // Desktop layout: horizontal arrangement
+            const imageSize = 80;
+            const gapSize = 200;
+            const centerX = canvas.width / 2;
+            const iconSpacing = 120;
             
-            state.images.push({
-                x: x,
-                y: y,
-                width: imageSize,
-                height: imageSize,
-                glowColor: state.sections[i].glowColor,
-                section: i,
-                active: false,
-                glitchActive: false,
-                hovered: false,
-                currentOffsetY: 0, // Current animated offset
-                targetOffsetY: 0 // Target offset for smooth transition
-            });
+            // Position icons by their centers to ensure symmetry
+            const leftIcon2CenterX = centerX - gapSize / 2 - iconSpacing;
+            const leftIcon2X = leftIcon2CenterX - imageSize / 2;
+            
+            const leftIcon1CenterX = leftIcon2CenterX - iconSpacing;
+            const leftIcon1X = leftIcon1CenterX - imageSize * 2;
+            
+            const rightIcon3CenterX = centerX + gapSize / 2 + iconSpacing;
+            const rightIcon3X = rightIcon3CenterX - imageSize / 2;
+            
+            const rightIcon4CenterX = rightIcon3CenterX + iconSpacing;
+            const rightIcon4X = rightIcon4CenterX + imageSize;
+            
+            for (let i = 0; i < state.sections.length; i++) {
+                let x;
+                const y = state.floorLevel - imageSize + 20;
+                
+                if (i === 0) {
+                    x = leftIcon1X;
+                } else if (i === 1) {
+                    x = leftIcon2X;
+                } else if (i === 2) {
+                    x = rightIcon3X;
+                } else {
+                    x = rightIcon4X;
+                }
+                
+                state.images.push({
+                    x: x,
+                    y: y,
+                    width: imageSize,
+                    height: imageSize,
+                    glowColor: state.sections[i].glowColor,
+                    section: i,
+                    active: false,
+                    glitchActive: false,
+                    hovered: false,
+                    currentOffsetY: 0,
+                    targetOffsetY: 0
+                });
+            }
         }
         
         // Set player initial position - spawn in the middle of the sidewalk
@@ -1086,7 +1110,10 @@
     // Update physics
     function updatePhysics() {
         // Update player position (no jumping, just horizontal movement)
-        state.player.x += state.player.velocityX;
+        // On mobile, player stays centered (no movement needed with vertical layout)
+        if (!state.isMobile) {
+            state.player.x += state.player.velocityX;
+        }
         
         // Keep player on sidewalk level
         state.player.y = state.floorLevel - state.player.height + 20; // Positioned on thicker sidewalk
@@ -1096,13 +1123,13 @@
             state.sceneTransitionCooldown--;
         }
         
-        // Simple edge detection
-        const edgeThreshold = 10; // pixels from edge to trigger transition
-        const atLeftEdge = state.player.x <= state.player.width / 2 + edgeThreshold;
-        const atRightEdge = state.player.x >= canvas.width - state.player.width / 2 - edgeThreshold;
-        
-        // Scene transitions (only if cooldown expired)
-        if (state.sceneTransitionCooldown === 0) {
+        // Scene transitions only work on desktop (mobile doesn't use edge scenes)
+        if (!state.isMobile && state.sceneTransitionCooldown === 0) {
+            // Simple edge detection
+            const edgeThreshold = 10; // pixels from edge to trigger transition
+            const atLeftEdge = state.player.x <= state.player.width / 2 + edgeThreshold;
+            const atRightEdge = state.player.x >= canvas.width - state.player.width / 2 - edgeThreshold;
+            
             // Transition from main to edge scene
             if (state.currentScene === 'main') {
                 if (atLeftEdge && keys['a']) {
@@ -1118,7 +1145,6 @@
                 }
             }
             // Transition from edge back to main scene
-            // When at an edge and pressing the key that moves THROUGH that edge (away from center), return to main
             else if (state.currentScene === 'edge') {
                 if (atLeftEdge && keys['a']) {
                     // At left edge, moving left (through the edge) → return to main, appear at right edge
@@ -1134,12 +1160,17 @@
             }
         }
         
-        // Normal boundary checks (keep player on screen)
-        if (state.player.x < state.player.width / 2) {
-            state.player.x = state.player.width / 2;
-        }
-        if (state.player.x > canvas.width - state.player.width / 2) {
-            state.player.x = canvas.width - state.player.width / 2;
+        // Normal boundary checks (keep player on screen) - desktop only
+        if (!state.isMobile) {
+            if (state.player.x < state.player.width / 2) {
+                state.player.x = state.player.width / 2;
+            }
+            if (state.player.x > canvas.width - state.player.width / 2) {
+                state.player.x = canvas.width - state.player.width / 2;
+            }
+        } else {
+            // On mobile, keep player centered
+            state.player.x = canvas.width / 2;
         }
         
         // Only check collisions with images in main scene
@@ -1147,8 +1178,8 @@
             checkImageCollision();
         }
         
-        // Check treasure chest collision in edge scene
-        if (state.currentScene === 'edge') {
+        // Check treasure chest collision in edge scene (desktop only)
+        if (state.currentScene === 'edge' && !state.isMobile) {
             checkTreasureChestCollision();
         }
     }
@@ -1173,98 +1204,33 @@
         state.treasureChestHovered = distanceX < imageSize / 2 + 10 && distanceY < imageSize / 2 + 10;
     }
     
-    // Handle keyboard input
-    const keys = {};
-    
-    // Touch controls for mobile
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let isTouching = false;
-    
-    // Touch event handlers for mobile movement
-    if (canvas) {
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevent scrolling
-            if (e.touches.length > 0) {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-                isTouching = true;
-            }
-        });
-        
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault(); // Prevent scrolling
-            if (e.touches.length > 0 && isTouching) {
-                const touchX = e.touches[0].clientX;
-                const touchY = e.touches[0].clientY;
-                const deltaX = touchX - touchStartX;
-                const deltaY = touchY - touchStartY;
-                
-                // Horizontal swipe threshold (30px)
-                if (Math.abs(deltaX) > 30 && Math.abs(deltaX) > Math.abs(deltaY)) {
-                    if (deltaX > 0) {
-                        // Swipe right
-                        keys['d'] = true;
-                        setTimeout(() => { keys['d'] = false; }, 100);
-                    } else {
-                        // Swipe left
-                        keys['a'] = true;
-                        setTimeout(() => { keys['a'] = false; }, 100);
-                    }
-                    touchStartX = touchX; // Update start position for continuous movement
-                }
-            }
-        });
-        
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            isTouching = false;
-            keys['a'] = false;
-            keys['d'] = false;
-            
-            // Check for tap (not swipe) - for icon interaction
-            if (e.changedTouches.length > 0) {
-                const touch = e.changedTouches[0];
-                const rect = canvas.getBoundingClientRect();
-                const tapX = touch.clientX - rect.left;
-                const tapY = touch.clientY - rect.top;
-                
-                // Check if tap is on an icon (same logic as click)
-                if (state.currentScene === 'main') {
-                    for (let i = 0; i < state.images.length; i++) {
-                        const img = state.images[i];
-                        const imgCenterX = img.x + img.width / 2;
-                        const imgCenterY = img.y + img.height / 2;
-                        const distX = Math.abs(tapX - imgCenterX);
-                        const distY = Math.abs(tapY - imgCenterY);
-                        
-                        if (distX < img.width / 2 + 10 && distY < img.height / 2 + 10) {
-                            const sectionId = state.sections[img.section].id;
-                            window.navigateToSection(sectionId);
-                            return;
-                        }
-                    }
-                } else if (state.currentScene === 'edge' && state.treasureChestHovered) {
-                    // Tap on treasure chest
-                    const coinSound = new Audio('assets/coin.mp3');
-                    coinSound.volume = 0.5;
-                    coinSound.play().catch(err => {
-                        console.log('Could not play coin sound:', err);
-                    });
-                    if (typeof window.showTreasureChestModal === 'function') {
-                        window.showTreasureChestModal();
-                    }
-                }
-            }
-        });
+    // Detect mobile device
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               (window.innerWidth <= 768 && 'ontouchstart' in window);
     }
     
+    // Store mobile state
+    state.isMobile = isMobileDevice();
+    
+    // Handle keyboard input
+    const keys = {};
     document.addEventListener('keydown', (e) => {
         if (e.key === ' ') {
             e.preventDefault(); // Prevent page scroll
         }
         
-        // Handle arrow keys and WASD
+        // Skip keyboard movement on mobile (icons are arranged vertically, no movement needed)
+        if (state.isMobile) {
+            // Still handle Enter and Escape keys
+            if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
+                // Let these keys through for navigation
+            } else {
+                return; // Ignore movement keys on mobile
+            }
+        }
+        
+        // Handle arrow keys and WASD (desktop only)
         const keyMap = {
             'ArrowLeft': 'a',
             'ArrowRight': 'd',
@@ -1460,14 +1426,16 @@
             return;
         }
         
-        // Handle movement
+        // Handle movement (desktop only)
         state.player.velocityX = 0;
         
-        if (keys['a']) {
-            state.player.velocityX = -state.moveSpeed;
-        }
-        if (keys['d']) {
-            state.player.velocityX = state.moveSpeed;
+        if (!state.isMobile) {
+            if (keys['a']) {
+                state.player.velocityX = -state.moveSpeed;
+            }
+            if (keys['d']) {
+                state.player.velocityX = state.moveSpeed;
+            }
         }
         
         // Update physics
