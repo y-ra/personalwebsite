@@ -656,10 +656,17 @@ body {
   margin-bottom: 2rem;
 }
 
+#resume iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 10px;
+}
+
 .btn {
   padding: 12px 30px;
   background: var(--charcoal);
-  color: #d8d8d8;
+  color: #FFFFFF;
   text-decoration: none;
   border-radius: 30px;
   font-weight: bold;
@@ -930,6 +937,10 @@ body {
 
   .about-text p, #resume p, #contact p {
     font-size: 1rem;
+  }
+
+  #resume iframe {
+    height: 600px;
   }
 
   .section-preview {

@@ -68,7 +68,7 @@
                 glowColor: '#0d3a6b', // Very dark blue
                 id: 'resume',
                 imageFile: 'resume.png',
-                preview: 'Download my resume.'
+                preview: 'View or download my resume.'
             },
             { 
                 name: 'Portfolio', 
