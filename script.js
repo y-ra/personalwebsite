@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     intersectionObserver.observe(section);
   });
 
-  // Prevent scrolling between sections - lock container scroll
+  // Prevent scrolling between sections: lock container scroll
   const contentSectionsContainer = document.getElementById('content-sections');
   if (contentSectionsContainer) {
     // Prevent any scrolling on the container itself
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { passive: false });
   }
 
-  // Create custom sword cursor for content sections
+  // Create custom sword cursor for content sections/pages & modals
   const swordCursor = document.createElement('img');
   swordCursor.src = 'assets/sword.gif';
   swordCursor.className = 'sword-cursor';
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Show/hide cursor based on whether we're on content sections or modal is open
+  // Show/hide cursor based on whether the user is on a content section/page or a modal is open
   function checkShouldShowCursor() {
     const contentSections = document.getElementById('content-sections');
     const modal = document.getElementById('treasure-chest-modal');
@@ -107,20 +107,15 @@ document.addEventListener('DOMContentLoaded', function() {
     swordCursor.style.display = 'none';
   });
 
-  // GitHub link easter egg
-  const githubLink = document.getElementById('github-link');
-  if (githubLink) {
-    githubLink.addEventListener('click', showMessage);
-  }
-
   // Handle project button clicks
   document.querySelectorAll('.project-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
-      e.stopPropagation(); // Prevent the project card click from firing
+      // Prevent the project card click from firing
+      e.stopPropagation(); 
       
       const href = this.getAttribute('href');
       if (href) {
-        // Special handling for anchor links (like #the-flop-video)
+        // Special handling for anchor links (e.g. #the-flop-video, music audio samples)
         if (href.startsWith('#')) {
           e.preventDefault();
           if (typeof window.navigateToSection === 'function') {
@@ -132,12 +127,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // For external links, let the default behavior handle it (target="_blank")
       } else {
-        e.preventDefault(); // Prevent navigation if href is empty
+        // Prevent navigation if href is empty
+        e.preventDefault(); 
       }
     });
   });
 
-  // Make project cards clickable (but allow buttons to work independently)
+  // Make project cards clickable while allowing buttons to work independently as well
   document.querySelectorAll('.project').forEach(project => {
     project.addEventListener('click', function(e) {
       // Don't navigate if clicking on a button
@@ -190,21 +186,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-
-function showMessage(event) {
-  event.preventDefault(); // Prevent the default link action
-  
-  // Show the message
-  const messageElement = document.getElementById('message');
-  messageElement.innerText = 'You found me 🥚!';
-  messageElement.style.display = 'block';
-
-  // Retrieve the link's URL
-  const url = event.currentTarget.href;
-
-  // Open the link after a short delay
-  setTimeout(function() {
-      window.open(url, '_blank'); // Open the link in a new tab
-      messageElement.style.display = 'none'; // Hide the message after opening
-  }, 1500); // Adjust delay (in milliseconds) as needed
-}

@@ -175,7 +175,7 @@ body {
   }
 }
 
-/* Landscape mobile - smaller instructions */
+/* Landscape mobile instructions */
 @media (max-width: 768px) and (orientation: landscape) {
   .instructions {
     font-size: 10px;
@@ -202,7 +202,7 @@ body {
   }
 }
 
-/* Section Preview (the modal that pops up) */
+/* Section Preview (the modal that pops up when over a homepage icon) */
 .section-preview {
   position: absolute;
   top: 42.5%;
@@ -356,7 +356,7 @@ body {
   color: #FFFFFF;
 }
 
-/* Content Sections */
+/* Content Sections/Pages */
 .content-sections {
   display: none;
   padding-top: 90px;
@@ -368,7 +368,7 @@ body {
   cursor: none; /* Hide default cursor */
 }
 
-/* Custom sword cursor for content sections */
+/* Custom sword cursor for content sections/pages & treasure chest modal */
 .sword-cursor {
   position: fixed;
   width: 24px;
@@ -385,14 +385,14 @@ body {
   display: block;
 }
 
-/* Keep sword cursor even over links and buttons */
+/* Keep sword cursor intact over links and buttons */
 .content-sections a,
 .content-sections button,
 .content-sections .project {
   cursor: none;
 }
 
-/* Treasure Chest Modal - show sword cursor */
+/* Treasure Chest Modal showing sword cursor */
 #treasure-chest-modal {
   cursor: none;
 }
@@ -540,14 +540,14 @@ body {
   border-radius: 20px;
   padding: 2rem;
   width: 300px;
-  height: 300px; /* Make squares */
+  height: 300px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box; /* Include padding in width/height */
+  box-sizing: border-box;
 }
 
 .project:hover {
@@ -608,7 +608,7 @@ body {
   color: #FFFFFF;
 }
 
-/* Music Section */
+/* Music Section, currently unused ?? */
 .music-content {
   text-align: center;
 }
@@ -629,7 +629,7 @@ body {
   margin-top: 2rem;
 }
 
-/* Modeling Section */
+/* Modeling Section, currently unused but working on adding this page */
 .modeling-content {
   text-align: center;
 }
@@ -731,7 +731,7 @@ body {
   color: var(--white-accent);
 }
 
-/* Footer Container - ensure no spacing */
+/* Footer Container */
 #footer-container {
   margin: 0;
   padding: 0;
@@ -825,7 +825,6 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* Header adjustments */
   .site-header {
     padding: 0.75rem 1rem;
   }
@@ -848,7 +847,7 @@ body {
     height: 28px;
   }
 
-  /* Canvas */
+  /* Game Canvas */
   #gameCanvas {
     width: 100%;
     height: auto;
@@ -861,7 +860,7 @@ body {
     top: 20px;
   }
 
-  /* Section preview */
+  /* Section preview AKA modal */
   .section-preview {
     width: 90%;
     max-width: 400px;
@@ -888,14 +887,14 @@ body {
     font-size: 0.9rem;
   }
 
-  /* Modal */
+  /* Treasure Chest Modal */
   #treasure-chest-modal > div {
     padding: 2rem 1.5rem;
     margin: 1rem;
     max-width: 90%;
   }
 
-  /* Content sections */
+  /* Content sections/pages */
   .content-section {
     padding: 2rem 1rem;
   }
@@ -936,7 +935,7 @@ body {
     top: 15px;
   }
 
-  /* Content sections */
+  /* Content sections/pages */
   .content-section h2 {
       font-size: 2rem;
   }
@@ -974,7 +973,7 @@ body {
     font-size: 0.85rem;
   }
 
-  /* Modal */
+  /* Treasure Chest Modal */
   #treasure-chest-modal > div {
     padding: 1.5rem 1rem;
     margin: 0.5rem;
@@ -1033,7 +1032,6 @@ body {
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
-  /* Larger touch targets */
   .header-icon-link {
     padding: 0.25rem;
   }

@@ -58,28 +58,28 @@
         sections: [
             { 
                 name: 'About', 
-                glowColor: '#0d1b4d', // Very dark navy blue
+                glowColor: '#0d1b4d',
                 id: 'about',
                 imageFile: 'about.png',
                 preview: 'Learn about me, my background, and motivations.'
             },
             { 
                 name: 'Resume', 
-                glowColor: '#0d3a6b', // Very dark blue
+                glowColor: '#0d3a6b',
                 id: 'resume',
                 imageFile: 'resume.png',
                 preview: 'View or download my resume.'
             },
             { 
                 name: 'Portfolio', 
-                glowColor: '#0a1f4d', // Very dark blue
+                glowColor: '#0a1f4d',
                 id: 'portfolio',
                 imageFile: 'portfolio.png',
                 preview: 'Game projects, music work, software engineering, and more.'
             },
             { 
                 name: 'Contact', 
-                glowColor: '#1a2f6b', // Very dark indigo
+                glowColor: '#1a2f6b',
                 id: 'contact',
                 imageFile: 'contact.png',
                 preview: 'Get in touch!'
@@ -133,7 +133,7 @@
         
         const headerHeight = 70;
         canvas.width = window.innerWidth;
-        // Canvas extends all the way to bottom of viewport (footer overlays it)
+        // Canvas extends all the way to bottom of viewport with footer overlaying it
         canvas.height = window.innerHeight - headerHeight;
         
         // Calculate actual footer height dynamically
@@ -143,7 +143,7 @@
         // Sidewalk starts 120px above footer and extends to footer top
         state.floorLevel = canvas.height - actualFooterHeight - 120;
         
-        // Reinitialize images if they exist (only on desktop)
+        // Reinitialize images if they exist, only on desktop
         if (!state.isMobile && state.images && state.images.length > 0) {
             initImages();
         }
@@ -153,7 +153,7 @@
     function loadImages() {
         return new Promise((resolve) => {
             let loaded = 0;
-            const total = state.sections.length + 4; // +1 for vines, +1 for sword, +1 for sidewalk, +1 for treasure chest
+            const total = state.sections.length + 4;
             
             // Load sidewalk
             const sidewalkImg = new Image();
@@ -294,7 +294,7 @@
             state.thunderAudio.volume = 0.75;
             state.thunderAudio.preload = 'auto';
             
-            // Load glitch sounds - create multiple copies of each for better randomness
+            // Load glitch sounds; create multiple copies of each for better randomness
             let loaded = 0;
             
             for (let i = 1; i <= 8; i++) {
@@ -309,7 +309,7 @@
             
             // Set up thunder audio event handlers
             state.thunderAudio.oncanplaythrough = () => {
-                // Thunder loaded - try to play immediately
+                // Thunder loaded, try to play immediately
                 playThunderAudio();
             };
             state.thunderAudio.onerror = () => {
@@ -331,7 +331,7 @@
                 playThunderAudio();
             };
             
-            // Add multiple event listeners for better compatibility (as fallback)
+            // Add multiple event listeners for better compatibility, as fallback
             document.addEventListener('click', playThunderOnInteraction, { once: true });
             document.addEventListener('keydown', playThunderOnInteraction, { once: true });
             document.addEventListener('touchstart', playThunderOnInteraction, { once: true });
@@ -347,7 +347,7 @@
     // Helper function to play thunder audio
     function playThunderAudio() {
         if (state.thunderAudio) {
-            // Try to play regardless of readyState - browser will handle buffering
+            // Try to play regardless of readyState; browser will handle buffering
             const playPromise = state.thunderAudio.play();
             if (playPromise !== undefined) {
                 playPromise.catch(e => {
@@ -364,7 +364,7 @@
         }
     }
     
-    // Track active media elements that should pause thunder
+    // Track active media elements that should pause thunder (like audio files, video, etc.)
     let activeMediaElements = new Set();
     
     // Helper function to pause thunder audio
@@ -432,7 +432,7 @@
             return;
         }
         
-        // Ensure floor level is set - calculate based on actual footer height
+        // Ensure floor level is set by calculating based on actual footer height
         if (!state.floorLevel || state.floorLevel <= 0) {
             const footerElement = document.querySelector('.site-footer');
             const actualFooterHeight = footerElement ? footerElement.offsetHeight : 50;
@@ -442,7 +442,7 @@
         state.images = [];
         
         // Mobile layout: vertical arrangement with smaller icons
-        // COMMENTED OUT - Mobile devices now show a message instead
+        // COMMENTED OUT - Mobile devices now show a message instead; actively fixing this for the future
         /*
         if (state.isMobile) {
             const imageSize = 50; // Smaller icons for mobile
@@ -520,7 +520,7 @@
             }
         }
         
-        // Set player initial position - spawn in the middle of the sidewalk
+        // Set player initial position to spawn in the middle of the sidewalk
         if (canvas) {
             state.player.x = canvas.width / 2; // Spawn in the middle of the sidewalk
             state.player.y = state.floorLevel - state.player.height + 20; // Positioned on thicker sidewalk
@@ -532,7 +532,7 @@
         if (!ctx) return;
         
         if (state.swordSprite) {
-            const swordSize = 48; // Larger sword
+            const swordSize = 48;
             ctx.save();
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(
@@ -567,7 +567,7 @@
             if (onlyHovered === true && !isHovered) return; // Only draw hovered
             if (onlyHovered === false && isHovered) return; // Only draw non-hovered
             
-            // Smooth transition for hover offset (similar to CSS transition: transform 0.3s ease)
+            // Smooth transition for hover offset (similar to CSS transition with transform 0.3s ease)
             image.targetOffsetY = isHovered ? -5 : 0;
             
             // Smooth interpolation towards target (easing function similar to CSS ease)
@@ -693,10 +693,10 @@
         const imageCenterX = image.x + image.width / 2;
         const imageCenterY = image.y + image.height / 2;
         
-        // Create new flashes rapidly (scaled to icon size)
+        // Create new flashes rapidly; scaled to icon size
         if (state.glitchEffect.duration > 0 && Math.random() > 0.3) {
-            const numFlashes = Math.floor(Math.random() * 2) + 1; // 1-2 flashes at a time (reduced from 1-3)
-            const iconScale = image.width / 120; // Scale factor based on icon size (was 120, now 80)
+            const numFlashes = Math.floor(Math.random() * 2) + 1; // 1-2 flashes at a time
+            const iconScale = image.width / 120; // Scale factor based on icon size
             for (let i = 0; i < numFlashes; i++) {
                 const spriteIndex = Math.floor(Math.random() * state.glitchSprites.length);
                 flashes.push({
@@ -704,10 +704,10 @@
                     x: imageCenterX + (Math.random() - 0.5) * image.width * 1.2,
                     y: imageCenterY + (Math.random() - 0.5) * image.height * 1.2,
                     rotation: (Math.random() - 0.5) * Math.PI * 2, // Random rotation
-                    scale: (0.08 + Math.random() * 0.15) * iconScale, // Smaller scale (reduced from 0.15-0.5 to 0.08-0.23)
+                    scale: (0.08 + Math.random() * 0.15) * iconScale, 
                     alpha: 0.8 + Math.random() * 0.2,
                     age: 0,
-                    maxAge: 2 + Math.random() * 2 // Shorter flash duration (reduced from 2-5 to 2-4)
+                    maxAge: 2 + Math.random() * 2 // Flash duration
                 });
             }
         }
@@ -787,7 +787,7 @@
         
         // Calculate where footer starts (in canvas coordinates)
         // Canvas top is at headerHeight (70px), so footer starts at window.innerHeight - actualFooterHeight
-        // In canvas coordinates, that's (window.innerHeight - headerHeight) - actualFooterHeight = canvas.height - actualFooterHeight
+        // In canvas coordinates, that is (window.innerHeight - headerHeight) - actualFooterHeight = canvas.height - actualFooterHeight
         const sidewalkBottom = canvas.height - actualFooterHeight;
         const sidewalkHeight = sidewalkBottom - state.floorLevel;
         
@@ -817,7 +817,7 @@
         }
     }
     
-    // Draw section name - DISABLED
+    // Draw section name - disabled but website does not load without this
     function drawSectionName() {
         // Section name heading removed
         return;
@@ -862,14 +862,14 @@
             const distanceX = Math.abs(playerCenterX - imageCenterX);
             const distanceY = Math.abs(playerCenterY - imageCenterY);
             
-            // Check if player is over image (using same collision detection as mouse hover)
+            // Check if player is over image, using the same collision detection as mouse hover
             const isSwordOverIcon = distanceX < image.width / 2 + 10 && distanceY < image.height / 2 + 10;
             
             if (isSwordOverIcon) {
                 hoveredIndexBySword = index;
             }
             
-            // Check if player is over image (using same collision detection as hover/enter - 10px buffer)
+            // Check if player is over image, using the same collision detection as hover/enter with a 10px buffer
             if (distanceX < image.width / 2 + 10 &&
                 distanceY < image.height / 2 + 10) {
                 
@@ -888,7 +888,7 @@
                     state.currentSection = image.section;
                     state.showPreview = true;
                     
-                    // Only trigger glitch if cooldown has expired and we didn't just return to portal
+                    // Only trigger glitch if cooldown has expired and the user didn't just return to the portal
                     if (state.glitchEffect.cooldown <= 0 && !state.glitchEffect.justReturned) {
                         image.glitchActive = true;
                         state.glitchEffect.active = true;
@@ -913,7 +913,7 @@
         });
         
         // Set hoveredIconIndexBySword based on sword position
-        // This allows sword and mouse to hover different icons simultaneously
+        // Allows sword and mouse to hover different icons simultaneously
         state.hoveredIconIndexBySword = hoveredIndexBySword;
         
         // Check mouse position for hover effect (independent of sword)
@@ -943,7 +943,8 @@
             state.glitchEffect.intensity = 0;
             state.glitchEffect.flashes = [];
             state.glitchEffect.duration = 0;
-            state.glitchEffect.cooldown = 0; // Reset cooldown when leaving all images
+            // Reset cooldown when leaving all images
+            state.glitchEffect.cooldown = 0; 
             // Stop any playing glitch sound
             if (state.glitchEffect.currentSound) {
                 try {
@@ -987,9 +988,7 @@
             state.glitchEffect.cooldown--;
         }
     }
-    
-    // Update glitch flashes (handled in drawGlitchEffect)
-    
+        
     // Initialize storm effects
     function initStorm() {
         if (!canvas) return;
@@ -1109,22 +1108,25 @@
         // Always draw sidewalk
         drawSidewalk();
         
-        // Only draw images and section name in main scene
+        // Only draw images and section name in the main scene
         if (state.currentScene === 'main' && state.images.length > 0) {
-            // Draw ALL icons first (including hovered ones) - this ensures sword appears above them
-            drawImages(); // Draw all icons with all their effects
-            // Draw sword AFTER all icons so it appears on top
+            // Draw ALL icons first, including hovered ones; this ensures the sword appears above them order-wise
+            // Draw all icons with all their effects
+            drawImages(); 
+            // Draw sword AFTER all icons
             ctx.save();
-            ctx.globalAlpha = 1.0; // Ensure full opacity
+            // Ensure full opacity
+            ctx.globalAlpha = 1.0; 
             drawPlayer(state.player.x, state.player.y);
             ctx.restore();
             drawSectionName();
         } else if (state.currentScene === 'edge') {
-            // In edge scene, draw treasure chest first, then sword on top
+            // In the edge scene, draw the treasure chest first, then the sword on top
             drawTreasureChest();
-            // Draw sword AFTER treasure chest so it appears on top
+            // Draw sword AFTER treasure chest
             ctx.save();
-            ctx.globalAlpha = 1.0; // Ensure full opacity
+            // Ensure full opacity
+            ctx.globalAlpha = 1.0; 
             drawPlayer(state.player.x, state.player.y);
             ctx.restore();
         }
@@ -1132,16 +1134,14 @@
     
     // Update physics
     function updatePhysics() {
-        // Update player position (no jumping, just horizontal movement)
-        // On mobile, player stays centered (no movement needed with vertical layout)
-        // COMMENTED OUT - Mobile devices now show a message instead
+        // On mobile, player stays centered (no movement needed with vertical layout) but is disabled for now because working on mobile
         // if (!state.isMobile) {
         if (!state.isMobile) {
             state.player.x += state.player.velocityX;
         }
         
         // Keep player on sidewalk level
-        state.player.y = state.floorLevel - state.player.height + 20; // Positioned on thicker sidewalk
+        state.player.y = state.floorLevel - state.player.height + 20;
         
         // Update transition cooldown
         if (state.sceneTransitionCooldown > 0) {
@@ -1149,11 +1149,11 @@
         }
         
         // Scene transitions only work on desktop (mobile doesn't use edge scenes)
-        // COMMENTED OUT - Mobile devices now show a message instead
+        // COMMENTED OUT - Mobile devices now show a message as of now, but working on mobile site
         // if (!state.isMobile && state.sceneTransitionCooldown === 0) {
         if (!state.isMobile && state.sceneTransitionCooldown === 0) {
-            // Simple edge detection
-            const edgeThreshold = 10; // pixels from edge to trigger transition
+            // Player edge detection
+            const edgeThreshold = 10; // pixels the user must be from edge to trigger transition
             const atLeftEdge = state.player.x <= state.player.width / 2 + edgeThreshold;
             const atRightEdge = state.player.x >= canvas.width - state.player.width / 2 - edgeThreshold;
             
@@ -1187,7 +1187,7 @@
             }
         }
         
-        // Normal boundary checks (keep player on screen) - desktop only
+        // Normal boundary checks (keep player on screen) - desktop only right now
         if (!state.isMobile) {
             if (state.player.x < state.player.width / 2) {
                 state.player.x = state.player.width / 2;
@@ -1197,7 +1197,7 @@
             }
         } else {
             // On mobile, keep player centered
-            // COMMENTED OUT - Mobile devices now show a message instead
+            // COMMENTED OUT - Mobile devices now show a message instead but working on mobile
             // state.player.x = canvas.width / 2;
         }
         
@@ -1206,7 +1206,7 @@
             checkImageCollision();
         }
         
-        // Check treasure chest collision in edge scene (desktop only)
+        // Check treasure chest collision in edge scene
         if (state.currentScene === 'edge' && !state.isMobile) {
             checkTreasureChestCollision();
         }
@@ -1228,7 +1228,7 @@
         const distanceX = Math.abs(playerCenterX - chestCenterX);
         const distanceY = Math.abs(playerCenterY - chestCenterY);
         
-        // Check if sword is over treasure chest (same detection as icons)
+        // Check if sword is over treasure chest; same detection as icons
         state.treasureChestHovered = distanceX < imageSize / 2 + 10 && distanceY < imageSize / 2 + 10;
     }
     
@@ -1245,11 +1245,12 @@
     const keys = {};
     document.addEventListener('keydown', (e) => {
         if (e.key === ' ') {
-            e.preventDefault(); // Prevent page scroll
+          // Prevent page scroll
+            e.preventDefault(); 
         }
         
         // Skip keyboard movement on mobile (icons are arranged vertically, no movement needed)
-        // COMMENTED OUT - Mobile devices now show a message instead
+        // COMMENTED OUT - Mobile devices now show a message instead but working on mobile
         /*
         if (state.isMobile) {
             // Still handle Enter and Escape keys
@@ -1261,7 +1262,7 @@
         }
         */
         
-        // Handle arrow keys and WASD (desktop only)
+        // Handle arrow keys and WASD for desktop
         const keyMap = {
             'ArrowLeft': 'a',
             'ArrowRight': 'd',
@@ -1311,7 +1312,8 @@
                 if (distX < img.width / 2 + 10 && distY < img.height / 2 + 10) {
                     const sectionId = state.sections[img.section].id;
                     window.navigateToSection(sectionId);
-                    return; // Exit early once we find a match
+                    // Exit early once a match is found
+                    return; 
                 }
             }
         }
@@ -1328,7 +1330,8 @@
             
             // Only return to portal if content sections are visible
             if (contentSections && contentSections.style.display !== 'none') {
-                e.preventDefault(); // Prevent browser back navigation
+                // Prevent browser back navigation
+                e.preventDefault(); 
                 window.returnToPortal();
             }
         }
@@ -1366,7 +1369,7 @@
             const clickX = e.clientX - rect.left;
             const clickY = e.clientY - rect.top;
             
-            // Check if clicking on an icon - use for loop to properly break out
+            // Check if clicking on an icon
             let clickedIcon = null;
             for (let i = 0; i < state.images.length; i++) {
                 const image = state.images[i];
@@ -1376,7 +1379,7 @@
                 const distanceY = Math.abs(clickY - iconCenterY);
                 
                 if (distanceX < image.width / 2 + 10 && distanceY < image.height / 2 + 10) {
-                    // Clicked on icon - navigate to this specific section
+                    // Clicked on icon; navigate to this specific section
                     clickedIcon = image;
                     break;
                 }
@@ -1388,7 +1391,7 @@
                 return;
             }
             
-            // Only navigate if clicking on the preview modal itself (not just anywhere when preview is showing)
+            // Only navigate if clicking on the preview modal itself, not just anywhere
             const previewElement = document.getElementById('section-preview');
             if (previewElement && state.showPreview && state.currentSection >= 0) {
                 const previewRect = previewElement.getBoundingClientRect();
@@ -1396,7 +1399,7 @@
                 const previewX = previewRect.left - canvasRect.left;
                 const previewY = previewRect.top - canvasRect.top;
                 
-                // Check if click is within preview modal bounds
+                // Check if click is within the preview modal bounds
                 if (clickX >= previewX && clickX <= previewX + previewRect.width &&
                     clickY >= previewY && clickY <= previewY + previewRect.height) {
                     window.navigateToSection(state.sections[state.currentSection].id);
@@ -1460,7 +1463,7 @@
         // Handle movement (desktop only)
         state.player.velocityX = 0;
         
-        // COMMENTED OUT - Mobile devices now show a message instead
+        // COMMENTED OUT - Mobile devices now show a message instead but working on mobile
         // if (!state.isMobile) {
         if (!state.isMobile) {
             if (keys['a']) {
@@ -1572,7 +1575,7 @@
                 const audio = document.getElementById('troll-audio');
                 if (audio) {
                     // TROLL AUDIO VOLUME (0.0 to 1.0)
-                    audio.volume = 0.5; // Set to desired volume (0.5 = 50%)
+                    audio.volume = 0.5;
                     if (typeof setupMediaThunderControl === 'function') {
                         setupMediaThunderControl(audio);
                     }
@@ -1672,7 +1675,7 @@
             resumeThunderAudio();
         }
         
-        // Lock scroll position of content-sections container
+        // Lock scroll position of content-sections/pages container
         if (contentSections) {
             contentSections.scrollTop = 0;
         }
@@ -1691,7 +1694,7 @@
         const contentSections = document.getElementById('content-sections');
         const returnBtn = document.getElementById('return-portal-btn');
         
-        // Check if we're already on the portal (not coming from a content section)
+        // Check if the user is already on the portal, AKA not coming from a content section/page
         const isAlreadyOnPortal = portalGame && portalGame.style.display !== 'none' && 
                                    contentSections && contentSections.style.display === 'none';
         
@@ -1720,7 +1723,8 @@
                 });
                 
                 section.style.display = 'none';
-                section.scrollTop = 0; // Reset scroll position
+                // Reset scroll position
+                section.scrollTop = 0;
             });
         }
         if (returnBtn) returnBtn.style.display = 'none';
@@ -1735,11 +1739,12 @@
             if (state.savedPlayerPosition) {
                 state.player.x = state.savedPlayerPosition.x;
                 state.player.y = state.savedPlayerPosition.y;
-                state.savedPlayerPosition = null; // Clear after restoring
+                // Clear after restoring
+                state.savedPlayerPosition = null; 
             } else if (!isAlreadyOnPortal) {
                 // Only reset to center if coming from a content section
                 state.player.x = canvas.width / 2; // Spawn in the middle of the sidewalk
-                state.player.y = state.floorLevel - state.player.height + 20; // Positioned on thicker sidewalk
+                state.player.y = state.floorLevel - state.player.height + 20;
             }
             // If already on portal, keep current position
             state.player.velocityX = 0;
@@ -1771,7 +1776,7 @@
                 }
             }
             
-            // Clear the justReturned flag after a delay (enough time for collision check to run)
+            // Clear the justReturned flag after a delay, which is enough time for collision check to run
             setTimeout(() => {
                 state.glitchEffect.justReturned = false;
             }, 100);
