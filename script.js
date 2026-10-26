@@ -107,6 +107,26 @@ document.addEventListener('DOMContentLoaded', function() {
     swordCursor.style.display = 'none';
   });
 
+  function openInternalSection(url, project) {
+    const sectionId = url.substring(1);
+    const returnSection = project && project.getAttribute('data-return-section');
+    const returnLabel = project && project.getAttribute('data-return-label');
+    if (returnSection) {
+      const backBtn = document.querySelector('#' + sectionId + ' .back-category-btn');
+      if (backBtn) {
+        backBtn.textContent = returnLabel || 'Back';
+        backBtn.onclick = function() {
+          window.navigateToSection(returnSection);
+        };
+      }
+    }
+    if (typeof window.navigateToSection === 'function') {
+      window.navigateToSection(sectionId);
+    } else {
+      window.location.href = url;
+    }
+  }
+
   // Handle project button clicks
   document.querySelectorAll('.project-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -118,12 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Special handling for anchor links (e.g. #the-flop-video, music audio samples)
         if (href.startsWith('#')) {
           e.preventDefault();
-          if (typeof window.navigateToSection === 'function') {
-            const sectionId = href.substring(1); // Remove the #
-            window.navigateToSection(sectionId);
-          } else {
-            window.location.href = href;
-          }
+          openInternalSection(href, this.closest('.project'));
         }
         // For external links, let the default behavior handle it (target="_blank")
       } else {
@@ -144,15 +159,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Get the project URL from data attribute
       const projectUrl = this.getAttribute('data-project-url');
       if (projectUrl) {
-        // Special handling for The Flop (anchor link to video section)
+        // Anchor links open an in-site page, such as a video
         if (projectUrl.startsWith('#')) {
-          // Navigate to the video section using the portal navigation system
-          if (typeof window.navigateToSection === 'function') {
-            const sectionId = projectUrl.substring(1); // Remove the #
-            window.navigateToSection(sectionId);
-          } else {
-            window.location.href = projectUrl;
-          }
+          openInternalSection(projectUrl, this);
         } else if (projectUrl) {
           // Only open if URL is not empty
           window.open(projectUrl, '_blank');
@@ -161,28 +170,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Pause thunder audio when The Flop video plays
-  const theFlopVideo = document.querySelector('#the-flop-video video');
-  if (theFlopVideo) {
-    theFlopVideo.addEventListener('play', function() {
-      // Access the pause function from portal-game.js
+  // Pause thunder while a portfolio video is playing, and resume when it pauses or ends
+  document.querySelectorAll('.content-section video').forEach(function(video) {
+    video.addEventListener('play', function() {
       if (typeof window.pauseThunderAudio === 'function') {
         window.pauseThunderAudio();
       }
     });
-    
-    theFlopVideo.addEventListener('pause', function() {
-      // Resume thunder when video is paused
+
+    video.addEventListener('pause', function() {
       if (typeof window.resumeThunderAudio === 'function') {
         window.resumeThunderAudio();
       }
     });
-    
-    theFlopVideo.addEventListener('ended', function() {
-      // Resume thunder when video ends
+
+    video.addEventListener('ended', function() {
       if (typeof window.resumeThunderAudio === 'function') {
         window.resumeThunderAudio();
       }
     });
-  }
+  });
 });

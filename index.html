@@ -29,14 +29,22 @@
   <!-- Pixel Art Portal Game -->
   <div id="portal-game" class="portal-container">
     <canvas id="gameCanvas"></canvas>
-    <div class="instructions"><span class="instructions-label">Instructions:</span><br><span
-        class="desktop-instructions">Use <span class="instructions-key">A/D</span> or the <span
-          class="instructions-key">Arrow Keys</span> to navigate.<br>Press <span class="instructions-key">Enter</span>
-        when the sword is on an icon to enter a page.<br><span class="instructions-key">Backspace</span> or <span
-          class="instructions-key">ESC</span> to return to this page.</span><span class="mobile-instructions">Swipe
-        left/right to move.<br>Tap icons to enter pages.<br>Use the back button to return.</span><br>Or just <span
-        class="instructions-key">click/tap</span> regularly to navigate around the website.<br><br>Experience best with
-      volume on!</div>
+    <div class="thunder-volume" id="thunder-volume">
+      <button type="button" class="thunder-mute-btn" id="thunder-mute-btn" aria-label="Mute thunder" aria-pressed="false">
+        <svg class="thunder-icon thunder-icon-on" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M4 9.5v5h3.2L12 18.2V5.8L7.2 9.5H4z" />
+          <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M15.2 9.2a3.6 3.6 0 0 1 0 5.6" />
+          <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M17.5 7a6.4 6.4 0 0 1 0 10" />
+        </svg>
+        <svg class="thunder-icon thunder-icon-off" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M4 9.5v5h3.2L12 18.2V5.8L7.2 9.5H4z" />
+          <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M16 10l4.5 4.5M20.5 10 16 14.5" />
+        </svg>
+      </button>
+      <label class="thunder-volume-label" for="thunder-volume-slider">Thunder</label>
+      <input class="thunder-volume-slider" id="thunder-volume-slider" type="range" min="0" max="100" value="75" step="1" aria-label="Thunder volume">
+    </div>
+    <div class="instructions"><span class="instructions-label">Instructions:</span><br>You can simply click/tap/use your pointer to navigate around the website as usual!<br><br>However, if you would like, you can use the <span class="instructions-key">A</span> &amp; <span class="instructions-key">D</span> keys, or <span class="instructions-key">arrow keys</span>, to navigate as well.<br>Press <span class="instructions-key">Enter</span> when the sword is on an icon to enter a page, and <span class="instructions-key">Backspace</span> or <span class="instructions-key">ESC</span> to return to this page.<br><br>Best with volume on!</div>
     <div id="section-preview" class="section-preview"></div>
     <!-- Mobile Message Overlay -->
     <div id="mobile-message" class="mobile-message" style="display: none;">
@@ -68,7 +76,7 @@
               <li><a href="https://y-ra.itch.io/" target="_blank">Itch.io</a></li>
             </ul>
             <p>
-              Hey, nice to meet you! I go by Rae or Rachel (either one works, truly), and I am an under(tale)graduate
+              Hey, nice to meet you! I go by Rae or Rachel, and I am an under(tale)graduate
               Honors Dean's List student at Northeastern majoring in Combined Computer Science & Music with a Concentration 
               in Music Technology. <br><br>
 
@@ -97,7 +105,7 @@
               I'm also delving deeper into my interest in building practical, user-centric software and taking full
               ownership of projects from concept through deployment. Developing web applications or software tools that
               enable people to improve their lives or their impact on the planet is something that got me into computer
-              science initially. You can see examples of this found on this website's portfolio page. <br><br>
+              science initially. You can see examples of this found on this website's portfolio page.
 
               <br><br>
 
@@ -121,13 +129,57 @@
         <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
         <h2>Portfolio</h2>
         <div class="projects">
+          <div class="project" data-project-url="#portfolio-software">
+            <h3>Software</h3>
+            <p></p>
+            <div class="project-buttons">
+              <a href="#portfolio-software" class="project-btn">Explore</a>
+            </div>
+          </div>
+
+          <div class="project" data-project-url="#portfolio-gaming">
+            <h3>Gaming</h3>
+            <p></p>
+            <div class="project-buttons">
+              <a href="#portfolio-gaming" class="project-btn">Explore</a>
+            </div>
+          </div>
+
+          <div class="project" data-project-url="#portfolio-audio">
+            <h3>Audio & Sound</h3>
+            <p></p>
+            <div class="project-buttons">
+              <a href="#portfolio-audio" class="project-btn">Explore</a>
+            </div>
+          </div>
+
+          <div class="project" data-project-url="#portfolio-miscellaneous">
+            <h3>Other</h3>
+            <p></p>
+            <div class="project-buttons">
+              <a href="#portfolio-miscellaneous" class="project-btn">Explore</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Software Portfolio Subpage -->
+    <section id="portfolio-software" class="content-section">
+      <div class="section-content">
+        <div class="section-nav-btns">
+          <button onclick="window.navigateToSection('portfolio')" class="back-home-btn">Back to Portfolio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+        </div>
+        <h2>Software</h2>
+        <div class="projects">
           <!-- Good Karma -->
-          <div class="project" data-project-url="https://github.com/y-ra/wingedgravity">
-            <h3>Winged Gravity</h3>
-            <p>Website for Good Karma, a punk rock band based in Boston. I led the design & development as well as 
+          <div class="project" data-project-url="https://good-karma-99wd.vercel.app/">
+            <h3>Good Karma</h3>
+            <p>Website for Good Karma, a punk rock band based in Boston. I led the design & development as well as
               client communication and logistics for this project as a Studio Project Lead. </p>
             <div class="project-buttons">
-              <a href="https://github.com/y-ra/wingedgravity" target="_blank" class="project-btn">GitHub</a>
+              <a href="https://good-karma-99wd.vercel.app/" target="_blank" class="project-btn">Visit Site</a>
             </div>
           </div>
 
@@ -143,15 +195,6 @@
             </div>
           </div>
 
-          <!-- The Flop -->
-          <div class="project" data-project-url="#the-flop-video">
-            <h3>The Flop</h3>
-            <p>I composed and produced the backing track for a whimsical animation created by a colleague.</p>
-            <div class="project-buttons">
-              <a href="#the-flop-video" class="project-btn">Watch</a>
-            </div>
-          </div>
-
           <!-- NUCircle -->
           <div class="project" data-project-url="https://fall25-project-m-a-r-t-514.onrender.com">
             <h3>NUCircle</h3>
@@ -162,15 +205,6 @@
               <a href="https://fall25-project-m-a-r-t-514.onrender.com" target="_blank" class="project-btn">Visit
                 Site</a>
               <a href="https://github.com/y-ra/NUCircle" target="_blank" class="project-btn">GitHub</a>
-            </div>
-          </div>
-
-          <!-- Audio & Music Samples -->
-          <div class="project" data-project-url="#audio-music">
-            <h3>Audio & Music Samples</h3>
-            <p>Other music and audio composed and produced by me.</p>
-            <div class="project-buttons">
-              <a href="#audio-music" class="project-btn">Listen</a>
             </div>
           </div>
 
@@ -195,7 +229,7 @@
             </p>
             <div class="project-buttons">
               <a href="https://urban-refugee.vercel.app" target="_blank" class="project-btn">Visit Site</a>
-              <a href="" target="https://github.com/y-ra/urban-refuge" class="project-btn">GitHub</a>
+              <a href="https://github.com/y-ra/urban-refuge" target="_blank" class="project-btn">GitHub</a>
             </div>
           </div>
 
@@ -208,9 +242,51 @@
             </p>
             <div class="project-buttons">
               <a href="https://open-bnb.vercel.app" target="_blank" class="project-btn">Visit Site</a>
-              <a href="" target="_blank" class="project-btn">GitHub</a>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gaming Portfolio Subpage -->
+    <section id="portfolio-gaming" class="content-section">
+      <div class="section-content">
+        <div class="section-nav-btns">
+          <button onclick="window.navigateToSection('portfolio')" class="back-home-btn">Back to Portfolio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+        </div>
+        <h2>Gaming</h2>
+        <div class="projects">
+
+          <!-- Gravity Game -->
+          <div class="project" data-project-url="https://y-ra.itch.io/winged-gravity">
+            <h3>Gravity Game</h3>
+            <p>
+              Trial game using the Unity default 2D template to try the implementation of a gravity-flip feature, &amp; to design a soundtrack &amp;
+              sound effects for walking, tokens, deaths, etc.
+            </p>
+            <div class="project-buttons">
+              <a href="https://y-ra.itch.io/winged-gravity" target="_blank" class="project-btn">Itch.io</a>
+            </div>
+          </div>
+
+          <!-- Dinkum Sound Redesign -->
+          <div class="project" data-project-url="#dinkum-sound-redesign" data-return-section="portfolio-gaming" data-return-label="Back to Gaming">
+            <h3>Dinkum Sound Redesign</h3>
+            <p>A sound redesign of a gameplay clip of the game Dinkum (developed by James Bendon).</p>
+            <div class="project-buttons">
+              <a href="#dinkum-sound-redesign" class="project-btn">Watch</a>
+            </div>
+          </div>
+
+          <!-- 3 Variations on 3 Sound Effects -->
+          <div class="project" data-project-url="#sound-effect-variations" data-return-section="portfolio-gaming" data-return-label="Back to Gaming">
+            <h3>3 Variations on 3 Sound Effects</h3>
+            <p>A short demo clip showcasing different variations of three distinct types of sound effects in varying gameplay.</p>
+            <div class="project-buttons">
+              <a href="#sound-effect-variations" class="project-btn">Watch</a>
+            </div>
+          </div>          
 
           <!-- Light 'Em All -->
           <div class="project" data-project-url="https://y-ra.itch.io/lightemall">
@@ -228,11 +304,106 @@
           <div class="project" data-project-url="https://kblizzz.itch.io/sugar-sprint">
             <h3>Sugar Sprint</h3>
             <p>
-              A 2D candy-themed platformer centered on a skater girl and her quirky dog. I collaborated on the
-              original soundtrack with a team of musicians.
+              A 2D candy-themed platformer centered on a skater girl and her dog. I worked on the
+              original soundtrack with a team of musicians, mainly focusing on the cutscene & sound effects.
             </p>
             <div class="project-buttons">
               <a href="https://kblizzz.itch.io/sugar-sprint" target="_blank" class="project-btn">Itch.io</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Audio Samples & Demos Portfolio Subpage -->
+    <section id="portfolio-audio" class="content-section">
+      <div class="section-content">
+        <div class="section-nav-btns">
+          <button onclick="window.navigateToSection('portfolio')" class="back-home-btn">Back to Portfolio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+        </div>
+        <h2>Audio & Sound</h2>
+        <div class="projects">
+
+          <!-- Audio & Music Samples -->
+          <div class="project" data-project-url="#audio-music">
+            <h3>Audio &amp; Music Demos & Samples</h3>
+            <p>Music & audio tracks composed & produced by me.</p>
+            <div class="project-buttons">
+              <a href="#audio-music" class="project-btn">Listen</a>
+            </div>
+          </div>
+
+          <!-- The Flop -->
+          <div class="project" data-project-url="#the-flop-video">
+            <h3>The Flop</h3>
+            <p>I composed and produced the backing track for a whimsical animation ("The Flop") for a colleague's project.</p>
+            <div class="project-buttons">
+              <a href="#the-flop-video" class="project-btn">Watch</a>
+            </div>
+          </div>
+
+          <!-- Gravity Game -->
+          <div class="project" data-project-url="https://y-ra.itch.io/winged-gravity">
+            <h3>Gravity Game</h3>
+            <p>
+              Trial game using the Unity default 2D template to try the implementation of a gravity-flip feature, &amp; to design a soundtrack &amp;
+              sound effects for walking, tokens, deaths, etc.
+            </p>
+            <div class="project-buttons">
+              <a href="https://y-ra.itch.io/winged-gravity" target="_blank" class="project-btn">Itch.io</a>
+            </div>
+          </div>
+
+          <!-- Dinkum Sound Redesign -->
+          <div class="project" data-project-url="#dinkum-sound-redesign" data-return-section="portfolio-audio" data-return-label="Back to Audio">
+            <h3>Dinkum Sound Redesign</h3>
+            <p>A sound redesign of a gameplay clip of the game Dinkum (developed by James Bendon).</p>
+            <div class="project-buttons">
+              <a href="#dinkum-sound-redesign" class="project-btn">Watch</a>
+            </div>
+          </div>
+
+          <!-- 3 Variations on 3 Sound Effects -->
+          <div class="project" data-project-url="#sound-effect-variations" data-return-section="portfolio-audio" data-return-label="Back to Audio">
+            <h3>3 Variations on 3 Sound Effects</h3>
+            <p>A short demo clip showcasing different variations of three distinct types of sound effects in varying gameplay.</p>
+            <div class="project-buttons">
+              <a href="#sound-effect-variations" class="project-btn">Watch</a>
+            </div>
+          </div>
+
+          <!-- Sugar Sprint -->
+          <div class="project" data-project-url="https://kblizzz.itch.io/sugar-sprint">
+            <h3>Sugar Sprint</h3>
+            <p>
+              A 2D candy-themed platformer centered on a skater girl and her dog. I worked on the
+              original soundtrack with a team of musicians, mainly focusing on the cutscene & sound effects.
+            </p>
+            <div class="project-buttons">
+              <a href="https://kblizzz.itch.io/sugar-sprint" target="_blank" class="project-btn">Itch.io</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Miscellaneous Portfolio Subpage -->
+    <section id="portfolio-miscellaneous" class="content-section">
+      <div class="section-content">
+        <div class="section-nav-btns">
+          <button onclick="window.navigateToSection('portfolio')" class="back-home-btn">Back to Portfolio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+        </div>
+        <h2>Other</h2>
+        <div class="projects">
+          <div class="project" data-project-url="https://www.youtube.com/watch?v=AyxmVY54CAY&amp;t=5153s">
+            <h3>Convocation 2026</h3>
+            <p>My brief speech for Northeastern University's 2026 Convocation ceremony, where I introduced Dean Benjamin Knapp of the College of Arts, Media, & Design.</p>
+            <div class="project-buttons">
+              <a href="https://www.youtube.com/watch?v=AyxmVY54CAY&amp;t=5153s" target="_blank" class="project-btn">Watch</a>
             </div>
           </div>
         </div>
@@ -242,11 +413,11 @@
     <!-- The Flop Video Section -->
     <section id="the-flop-video" class="content-section">
       <div class="section-content">
-        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem;">
-          <button onclick="window.navigateToSection('portfolio')" class="back-home-btn" style="margin: 0;">Back to
-            Portfolio</button>
-          <button onclick="returnToPortal()" class="back-home-btn" style="margin: 0;">Back to Home</button>
+        <div class="section-nav-btns">
+          <button onclick="window.navigateToSection('portfolio-audio')" class="back-home-btn">Back to Audio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
         </div>
+        <p class="media-thunder-note">(Automatically mutes thunder while playing)</p>
         <h2>The Flop</h2>
         <div style="text-align: center; margin-top: 2rem;">
           <video controls style="max-width: 100%; border-radius: 10px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);">
@@ -257,29 +428,102 @@
       </div>
     </section>
 
+    <!-- Dinkum Sound Redesign Video Section -->
+    <section id="dinkum-sound-redesign" class="content-section">
+      <div class="section-content">
+        <div class="section-nav-btns">
+          <button type="button" class="back-home-btn back-category-btn" onclick="window.navigateToSection('portfolio-audio')">Back to Audio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+        </div>
+        <p class="media-thunder-note">(Automatically mutes thunder while playing)</p>
+        <h2>Dinkum Sound Redesign</h2>
+        <div style="text-align: center; margin-top: 2rem;">
+          <video controls style="max-width: 100%; border-radius: 10px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);">
+            <source src="assets/Dinkum-Sound-Redesign.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 Variations on 3 Sound Effects Video Section -->
+    <section id="sound-effect-variations" class="content-section">
+      <div class="section-content">
+        <div class="section-nav-btns">
+          <button type="button" class="back-home-btn back-category-btn" onclick="window.navigateToSection('portfolio-audio')">Back to Audio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
+        </div>
+        <p class="media-thunder-note">(Automatically mutes thunder while playing)</p>
+        <h2>3 Variations on 3 Sound Effects</h2>
+        <div style="text-align: center; margin-top: 2rem;">
+          <video controls style="max-width: 100%; border-radius: 10px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);">
+            <source src="assets/3 Variations on 3 Sound Effects Video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
     <!-- Audio & Music Samples Section -->
     <section id="audio-music" class="content-section">
       <div class="section-content">
-        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
-          <button onclick="window.navigateToSection('portfolio')" class="back-home-btn" style="margin: 0;">Back to
-            Portfolio</button>
-          <button onclick="returnToPortal()" class="back-home-btn" style="margin: 0;">Back to Home</button>
+        <div class="section-nav-btns">
+          <button onclick="window.navigateToSection('portfolio-audio')" class="back-home-btn">Back to Audio</button>
+          <button onclick="returnToPortal()" class="back-home-btn">Back to Home</button>
         </div>
-        <h2>Audio & Music Samples</h2>
+        <p class="media-thunder-note">(Automatically mutes thunder while playing)</p>
+        <h2>Audio & Music Demos & Samples</h2>
         <div
           style="text-align: center; margin-top: 2rem; display: flex; flex-direction: column; gap: 2rem; align-items: center;">
           <div style="width: 100%; max-width: 600px;">
             <audio controls style="width: 100%; margin-bottom: 1rem;">
-              <source src="assets/must2102-fp.wav" type="audio/wav">
+              <source src="assets/explore_a_nice_cave_full.wav" type="audio/wav">
               Your browser does not support the audio element.
             </audio>
           </div>
+
+          <div style="width: 100%; max-width: 600px;">
+            <audio controls style="width: 100%; margin-bottom: 1rem;">
+              <source src="assets/ambient-track-01.wav" type="audio/wav">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+
           <div style="width: 100%; max-width: 600px;">
             <audio controls style="width: 100%; margin-bottom: 1rem;">
               <source src="assets/must2102-3b.wav" type="audio/wav">
               Your browser does not support the audio element.
             </audio>
           </div>
+
+          <div style="width: 100%; max-width: 600px;">
+            <audio controls style="width: 100%; margin-bottom: 1rem;">
+              <source src="assets/another_culture_song_full.wav" type="audio/wav">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+
+          <div style="width: 100%; max-width: 600px;">
+            <audio controls style="width: 100%; margin-bottom: 1rem;">
+              <source src="assets/airy-sampling-project.wav" type="audio/wav">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+
+          <div style="width: 100%; max-width: 600px;">
+            <audio controls style="width: 100%; margin-bottom: 1rem;">
+              <source src="assets/must2102-fp.wav" type="audio/wav">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+
+          <div style="width: 100%; max-width: 600px;">
+            <audio controls style="width: 100%; margin-bottom: 1rem;">
+              <source src="assets/cute_bazaar_full.wav" type="audio/wav">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+
         </div>
       </div>
     </section>
@@ -324,10 +568,11 @@
   <div id="treasure-chest-modal"
     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; flex-wrap: wrap;">
     <div
-      style="background: rgba(13, 33, 80, 0.95); border: 2px solid rgba(125, 245, 255, 0.5); border-radius: 20px; padding: 3rem; text-align: center; max-width: 500px; box-shadow: 0 8px 35px rgba(0, 0, 0, 0.7);">
+      style="background: rgba(163, 189, 254, 0.95); border: 2px solid rgba(0, 0, 130, 0.5); border-radius: 20px; padding: 3rem; text-align: center; max-width: 500px; box-shadow: 0 8px 35px rgba(0, 0, 0, 0.7);">
       <p style="font-family: 'Space Grotesk', sans-serif; color: #FFFFFF; margin-bottom: 2rem; text-align: center;">
-        Congratulations, you found the hidden treasure! I hope it was fun to find. Here's the worst audio track I've
-        ever made. (Turn your volume down if it's high.)</p>
+        Congratulations, you found the hidden treasure! I hope it was fun to find. Here's a really 
+        great & amazing track that will blow you away. 
+        (Turn your volume down if it's high.)</p>
       <audio id="troll-audio" controls style="width: 100%; margin-bottom: 1rem;">
         <source src="assets/troll.wav" type="audio/wav">
         Your browser does not support the audio element.

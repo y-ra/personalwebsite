@@ -58,28 +58,28 @@
         sections: [
             { 
                 name: 'About', 
-                glowColor: '#0d1b4d',
+                glowColor: '#A7BBFD',
                 id: 'about',
                 imageFile: 'about.png',
                 preview: 'Learn about me, my background, and motivations.'
             },
             { 
                 name: 'Resume', 
-                glowColor: '#0d3a6b',
+                glowColor: '#87C2FF',
                 id: 'resume',
                 imageFile: 'resume.png',
                 preview: 'View or download my resume.'
             },
             { 
                 name: 'Portfolio', 
-                glowColor: '#0a1f4d',
+                glowColor: '#A8C2FF',
                 id: 'portfolio',
                 imageFile: 'portfolio.png',
                 preview: 'Game projects, music work, software engineering, and more.'
             },
             { 
                 name: 'Contact', 
-                glowColor: '#1a2f6b',
+                glowColor: '#83A0F6',
                 id: 'contact',
                 imageFile: 'contact.png',
                 preview: 'Get in touch!'
@@ -284,15 +284,103 @@
         });
     }
     
+    // Thunder volume chosen from the landing-page control (0–1)
+    const THUNDER_DEFAULT_VOLUME = 0.75;
+    let thunderUserVolume = THUNDER_DEFAULT_VOLUME;
+    let thunderVolumeBeforeMute = THUNDER_DEFAULT_VOLUME;
+
+    function applyThunderVolume() {
+        if (state.thunderAudio) {
+            state.thunderAudio.volume = thunderUserVolume;
+        }
+
+        const slider = document.getElementById('thunder-volume-slider');
+        const control = document.getElementById('thunder-volume');
+        const muteBtn = document.getElementById('thunder-mute-btn');
+        if (!slider || !control || !muteBtn) return;
+
+        const percent = Math.round(thunderUserVolume * 100);
+        slider.value = String(percent);
+        slider.style.setProperty('--volume', percent + '%');
+        slider.setAttribute('aria-valuenow', String(percent));
+
+        const muted = thunderUserVolume === 0;
+        control.classList.toggle('is-muted', muted);
+        muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
+        muteBtn.setAttribute('aria-label', muted ? 'Unmute thunder' : 'Mute thunder');
+    }
+
+    function setupThunderVolumeControl() {
+        const slider = document.getElementById('thunder-volume-slider');
+        const muteBtn = document.getElementById('thunder-mute-btn');
+        if (!slider || !muteBtn || slider.dataset.bound === 'true') return;
+        slider.dataset.bound = 'true';
+
+        slider.addEventListener('input', () => {
+            const value = Number(slider.value) / 100;
+            if (value > 0) {
+                thunderVolumeBeforeMute = value;
+            }
+            thunderUserVolume = value;
+            applyThunderVolume();
+        });
+
+        muteBtn.addEventListener('click', () => {
+            if (thunderUserVolume > 0) {
+                thunderVolumeBeforeMute = thunderUserVolume;
+                thunderUserVolume = 0;
+            } else {
+                thunderUserVolume = thunderVolumeBeforeMute > 0 ? thunderVolumeBeforeMute : THUNDER_DEFAULT_VOLUME;
+            }
+            applyThunderVolume();
+        });
+
+        applyThunderVolume();
+    }
+
     // Load audio files
     function loadAudio() {
         return new Promise((resolve) => {
             // Load thunder audio
             state.thunderAudio = new Audio('assets/thunder.mp3');
             state.thunderAudio.loop = true;
-            // THUNDER VOLUME
-            state.thunderAudio.volume = 0.75;
+            state.thunderAudio.volume = thunderUserVolume;
             state.thunderAudio.preload = 'auto';
+
+            // If the browser drops the loop, start the track again unless other media is playing
+            let thunderLoopTime = -1;
+            let thunderLoopStamp = 0;
+            const keepThunderLooping = () => {
+                const audio = state.thunderAudio;
+                if (!audio || isBlockingMediaPlaying()) return;
+
+                const now = performance.now();
+                if (audio.paused || audio.ended) {
+                    audio.loop = true;
+                    if (audio.ended) {
+                        audio.currentTime = 0;
+                    }
+                    playThunderAudio();
+                    thunderLoopTime = audio.currentTime;
+                    thunderLoopStamp = now;
+                    return;
+                }
+
+                if (audio.currentTime !== thunderLoopTime) {
+                    thunderLoopTime = audio.currentTime;
+                    thunderLoopStamp = now;
+                    return;
+                }
+
+                if (thunderLoopStamp && now - thunderLoopStamp > 5000) {
+                    audio.loop = true;
+                    audio.currentTime = 0;
+                    playThunderAudio();
+                    thunderLoopStamp = now;
+                }
+            };
+            state.thunderAudio.addEventListener('ended', keepThunderLooping);
+            setInterval(keepThunderLooping, 2000);
             
             // Load glitch sounds; create multiple copies of each for better randomness
             let loaded = 0;
@@ -344,31 +432,60 @@
         });
     }
     
+    // Track active media elements that should pause thunder (like audio files, video, etc.)
+    let activeMediaElements = new Set();
+    // Bumps whenever thunder is paused so delayed autoplay retries cannot start it again
+    let thunderPlayAttempt = 0;
+
+    function isBlockingMediaPlaying() {
+        for (const el of activeMediaElements) {
+            if (el && el !== state.thunderAudio && !el.paused && !el.ended) {
+                return true;
+            }
+        }
+
+        const media = document.querySelectorAll('video, audio');
+        for (const el of media) {
+            if (el !== state.thunderAudio && !el.paused && !el.ended) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Helper function to play thunder audio
     function playThunderAudio() {
-        if (state.thunderAudio) {
-            // Try to play regardless of readyState; browser will handle buffering
-            const playPromise = state.thunderAudio.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(e => {
-                    // If autoplay is blocked, try again after a short delay
-                    if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
-                        setTimeout(() => {
+        if (!state.thunderAudio || isBlockingMediaPlaying()) {
+            return;
+        }
+
+        const attempt = ++thunderPlayAttempt;
+        // Try to play regardless of readyState; browser will handle buffering
+        const playPromise = state.thunderAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                // A newer play/pause superseded this attempt, or playback was intentionally paused
+                if (attempt !== thunderPlayAttempt || e.name === 'AbortError') {
+                    return;
+                }
+                // If autoplay is blocked, try again after a short delay
+                if ((e.name === 'NotAllowedError' || e.name === 'NotSupportedError') && !isBlockingMediaPlaying()) {
+                    setTimeout(() => {
+                        if (attempt === thunderPlayAttempt && !isBlockingMediaPlaying()) {
                             playThunderAudio();
-                        }, 1000);
-                    } else {
-                        console.warn('Could not play thunder audio:', e);
-                    }
-                });
-            }
+                        }
+                    }, 1000);
+                } else if (e.name !== 'NotAllowedError' && e.name !== 'NotSupportedError') {
+                    console.warn('Could not play thunder audio:', e);
+                }
+            });
         }
     }
     
-    // Track active media elements that should pause thunder (like audio files, video, etc.)
-    let activeMediaElements = new Set();
-    
     // Helper function to pause thunder audio
     function pauseThunderAudio() {
+        thunderPlayAttempt++;
         if (state.thunderAudio && !state.thunderAudio.paused) {
             state.thunderAudio.pause();
         }
@@ -380,7 +497,7 @@
     // Helper function to resume thunder audio
     function resumeThunderAudio() {
         // Only resume if no media is currently playing
-        if (activeMediaElements.size === 0 && state.thunderAudio && state.thunderAudio.paused) {
+        if (!isBlockingMediaPlaying() && state.thunderAudio && state.thunderAudio.paused) {
             playThunderAudio();
         }
     }
@@ -402,6 +519,13 @@
         };
         
         const onPause = function() {
+            // Some browsers emit pause while playback continues. Keep thunder stopped in that case.
+            if (!mediaElement.paused && !mediaElement.ended) {
+                activeMediaElements.add(mediaElement);
+                pauseThunderAudio();
+                return;
+            }
+
             activeMediaElements.delete(mediaElement);
             resumeThunderAudio();
         };
@@ -590,7 +714,7 @@
             }
             
             // Draw hover glow effect
-            const electricBlue = '#7DF5FF';
+            const electricBlue = '#000082';
             if (isHovered) {
                 ctx.save();
                 ctx.shadowBlur = 20;
@@ -621,7 +745,7 @@
                 ctx.shadowBlur = 10;
                 ctx.shadowColor = electricBlue;
             } else {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fillStyle = '#ffffff';
             }
             
             const labelX = image.x + image.width / 2;
@@ -640,7 +764,7 @@
         const chestX = canvas.width / 2 - imageSize / 2; // Centered horizontally
         const chestY = state.floorLevel - (imageSize - 40); // Same Y position as icons
         
-        const electricBlue = '#7DF5FF';
+        const electricBlue = '#000082';
         const isHovered = state.treasureChestHovered;
         
         // Draw hover glow effect
@@ -1026,14 +1150,14 @@
         
         // Dark stormy sky gradient
         const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#1a1a2e');
-        gradient.addColorStop(0.5, '#16213e');
-        gradient.addColorStop(1, '#0f1419');
+        gradient.addColorStop(0, '#C8C8EE');
+        gradient.addColorStop(0.5, '#B6C7F4');
+        gradient.addColorStop(1, '#E1EBF5');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         // Draw clouds
-        ctx.fillStyle = '#2a2a3a';
+        ctx.fillStyle = '#B9B9E2';
         state.storm.clouds.forEach(cloud => {
             ctx.globalAlpha = cloud.opacity;
             // Draw cloud as multiple circles
@@ -1080,7 +1204,7 @@
         }
         
         // Draw rain
-        ctx.strokeStyle = '#6b9bd1';
+        ctx.strokeStyle = '#165DAC';
         ctx.lineWidth = 1;
         state.storm.rain.forEach(drop => {
             ctx.globalAlpha = 0.6;
@@ -1244,6 +1368,10 @@
     // Handle keyboard input
     const keys = {};
     document.addEventListener('keydown', (e) => {
+        if (e.target.closest && e.target.closest('#thunder-volume')) {
+            return;
+        }
+
         if (e.key === ' ') {
           // Prevent page scroll
             e.preventDefault(); 
@@ -1492,6 +1620,7 @@
     // Initialize when DOM is ready
     function initializeGame() {
         console.log('Initializing game...');
+        setupThunderVolumeControl();
         
         // Get canvas elements
         if (!getCanvasElements()) {
